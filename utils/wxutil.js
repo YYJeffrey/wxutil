@@ -71,7 +71,7 @@ const request = {
 /**
  * file用法：
  * 1.file.download(url).then((data) => {}).catch((error) => {})
- * 2.file.upload({url: url, fileName: fileName, filePath: filePath, data: {}, header: {}}).then((data) => {}).catch((error) => {})
+ * 2.file.upload({url: url, fileParam: fileParam, filePath: filePath, data: {}, header: {}}).then((data) => {}).catch((error) => {})
  * @param {JSON Object} handler 
  */
 const file = {
@@ -104,7 +104,7 @@ const file = {
   upload: function(handler) {
     const {
       url,
-      fileName,
+      fileParam,
       filePath,
       data,
       header
@@ -112,7 +112,7 @@ const file = {
     return new Promise((resolve, reject) => {
       wx.uploadFile({
         url: url,
-        name: fileName,
+        name: fileParam,
         filePath: filePath,
         formData: data,
         header: header,
@@ -254,25 +254,25 @@ function getStorage(key) {
 
 
 /**
- * 字符串判空 - regNull用法：
- * 1.regNull("text")
+ * 字符串判不为空 - isNotNull用法：
+ * 1.isNotNull("text")
  * @param {String} text 字符串
- * @return {Boolean} 字符串合法返回真否则假
+ * @return {Boolean} 字符串合法返回真否则返回假
  */
-function regNull(text) {
+function isNotNull(text) {
   if (text == null) {
     return false;
   }
   if (text.match(/^\s+$/)) {
     return false;
   }
+  if (text.match(/^\s*$/)) {
+    return false;
+  }
   if (text.match(/^[ ]+$/)) {
     return false;
   }
   if (text.match(/^[ ]*$/)) {
-    return false;
-  }
-  if (text.match(/^\s*$/)) {
     return false;
   }
   return true;
@@ -285,14 +285,29 @@ function regNull(text) {
  * @param {Date} date 
  */
 function getDateTime(date = new Date()) {
-  return {
-    year: date.getFullYear(),
-    month: date.getMonth() + 1,
-    day: date.getDate(),
-    hour: date.getHours(),
-    minute: date.getMinutes(),
-    second: date.getSeconds()
+  var year = date.getFullYear()
+  var month = date.getMonth() + 1
+  var day = date.getDate()
+  var hour = date.getHours()
+  var minute = date.getMinutes()
+  var second = date.getSeconds()
+
+  if (month >= 1 && month <= 9) {
+    month = "0" + month
   }
+  if (day >= 0 && day <= 9) {
+    day = "0" + day
+  }
+  if (hour >= 0 && hour <= 9) {
+    hour = "0" + hour
+  }
+  if (minute >= 0 && minute <= 9) {
+    minute = "0" + minute
+  }
+  if (second >= 0 && second <= 9) {
+    second = "0" + second
+  }
+  return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second
 }
 
 
@@ -314,7 +329,7 @@ module.exports = {
   showLoading: showLoading,
   setStorage: setStorage,
   getStorage: getStorage,
-  regNull: regNull,
+  isNotNull: isNotNull,
   getDateTime: getDateTime,
   getTimestamp: getTimestamp
 }
