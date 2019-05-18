@@ -71,7 +71,7 @@ const request = {
 /**
  * file用法：
  * 1.file.download(url).then((data) => {}).catch((error) => {})
- * 2.file.upload({url: url, fileParam: fileParam, filePath: filePath, data: {}, header: {}}).then((data) => {}).catch((error) => {})
+ * 2.file.upload({url: url, fileKey: fileKey, filePath: filePath, data: {}, header: {}}).then((data) => {}).catch((error) => {})
  * @param {JSON Object} handler 
  */
 const file = {
@@ -104,7 +104,7 @@ const file = {
   upload: function(handler) {
     const {
       url,
-      fileParam,
+      fileKey,
       filePath,
       data,
       header
@@ -112,7 +112,7 @@ const file = {
     return new Promise((resolve, reject) => {
       wx.uploadFile({
         url: url,
-        name: fileParam,
+        name: fileKey,
         filePath: filePath,
         formData: data,
         header: header,
