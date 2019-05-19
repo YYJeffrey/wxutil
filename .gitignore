@@ -1,0 +1,5 @@
+/pages/*
+app.js
+app.wxss
+project.config.json
+!/utils/wxutil.js
