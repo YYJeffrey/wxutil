@@ -1,2 +1,0 @@
-<!--index.wxml-->
-<live-player src="rtmp://10.26.231.207/live/20190503" mode="RTC" autoplay style="width: 300px; height: 225px;" />
