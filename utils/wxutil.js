@@ -14,7 +14,7 @@
  * @param {JSON Object} handler 
  */
 const request = {
-  get: function(handler) {
+  get: function (handler) {
     if (typeof handler === "string") {
       handler = {
         url: String(handler),
@@ -24,24 +24,24 @@ const request = {
     return this.Request("GET", handler)
   },
 
-  post: function(handler) {
+  post: function (handler) {
     return this.Request("POST", handler)
   },
 
-  put: function(handler) {
+  put: function (handler) {
     return this.Request("PUT", handler)
   },
 
-  patch: function(handler) {
+  patch: function (handler) {
     return this.Request("PATCH", handler)
   },
 
-  delete: function(handler) {
+  delete: function (handler) {
     return this.Request("DELETE", handler)
   },
 
   // RequestHandler
-  Request: function(method, handler) {
+  Request: function (method, handler) {
     const {
       url,
       data,
@@ -56,10 +56,10 @@ const request = {
         data: data,
         header: Object.assign(head, header),
         method: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'].indexOf(method) > -1 ? method : 'GET',
-        success: function(res) {
+        success: function (res) {
           resolve(res)
         },
-        fail: function() {
+        fail: function () {
           reject('request failed')
         }
       })
@@ -75,7 +75,7 @@ const request = {
  * @param {JSON Object} handler 
  */
 const file = {
-  download: function(handler) {
+  download: function (handler) {
     if (typeof handler === "string") {
       handler = {
         url: String(handler)
@@ -91,17 +91,17 @@ const file = {
         url: url,
         filePath: filePath,
         header: header,
-        success: function(res) {
+        success: function (res) {
           resolve(res)
         },
-        fail: function() {
+        fail: function () {
           reject('downloadFile failed')
         }
       })
     })
   },
 
-  upload: function(handler) {
+  upload: function (handler) {
     const {
       url,
       fileKey,
@@ -116,11 +116,118 @@ const file = {
         filePath: filePath,
         formData: data,
         header: header,
-        success: function(res) {
+        success: function (res) {
           resolve(res)
         },
-        fail: function() {
+        fail: function () {
           reject('uploadFile failed')
+        }
+      })
+    })
+  }
+}
+
+
+/**
+ * socket用法：
+ * let socketOpen = false
+ * socket.connect(url)
+ * 
+ * wx.onSocketMessage(function(res) {
+ *  console.log(res)  
+ * }
+ * 
+ * wx.onSocketOpen(function(res) {
+ *  socketOpen = true
+ *  if socketOpen: socket.send("hello").then((data) => {})
+ *  socket.close(url) || wx.closeSocket()
+ * })
+ */
+const socket = {
+  connect: function (url, handler = {}) {
+    const {
+      header,
+      protocols
+    } = handler
+    const head = {
+      'content-type': 'application/json'
+    }
+    return new Promise((resolve, reject) => {
+      wx.connectSocket({
+        url: url,
+        header: Object.assign(head, header),
+        protocols: typeof protocols === "undefined" ? [] : protocols,
+        success: function (res) {
+          resolve(res)
+        },
+        fail: function () {
+          reject('connect failed')
+        }
+      })
+    })
+  },
+
+  // 需在onSocketOpen回调内使用
+  send: function (data) {
+    return new Promise((resolve, reject) => {
+      wx.sendSocketMessage({
+        data: data,
+        success: function (res) {
+          resolve(res)
+        },
+        fail: function () {
+          reject('sendSocket failed')
+        }
+      })
+    })
+  },
+
+  close: function (url) {
+    wx.connectSocket({
+      url: url
+    })
+  }
+}
+
+
+/**
+ * image用法：
+ * 1.image.save(path).then((data) => {}).catch((error) => {})
+ * 2.image.preview([])
+ * 3.image.choose(1).then((data) => {}).catch((error) => {})
+ * @param {JSON Object} handler 
+ */
+const image = {
+  save: function (path) {
+    return new Promise((resolve, reject) => {
+      wx.saveImageToPhotosAlbum({
+        filePath: path,
+        success: function (res) {
+          resolve(res)
+        },
+        fail: function () {
+          reject('saveImage failed')
+        }
+      })
+    })
+  },
+
+  preview: function (urls) {
+    wx.previewImage({
+      urls: urls
+    })
+  },
+
+  choose: function (count = 9, sourceType = ['album', 'camera']) {
+    return new Promise((resolve, reject) => {
+      wx.chooseImage({
+        count: count,
+        sourceType: sourceType,
+        success: function (res) {
+          resolve(res)
+        },
+        fail: function () {
+          reject('chooseImage failed')
         }
       })
     })
@@ -148,10 +255,10 @@ function showToast(title, handler = {}) {
       icon: typeof icon === "undefined" ? "none" : icon,
       duration: typeof duration === "undefined" ? 1000 : duration,
       mask: typeof mask === "undefined" ? true : mask,
-      success: function(res) {
+      success: function (res) {
         resolve(res)
       },
-      fail: function() {
+      fail: function () {
         reject('showToast failed')
       }
     })
@@ -175,18 +282,18 @@ function showModal(title, content, handler = {}) {
     confirmColor,
   } = handler
   return new Promise((resolve, reject) => {
-    wx.showToast({
+    wx.showModal({
       title: title,
       content: content,
-      showCancel: showCancel,
-      cancelText: cancelText,
-      confirmText: confirmText,
-      cancelColor: cancelColor,
-      confirmColor: confirmColor,
-      success: function(res) {
+      showCancel: typeof showCancel === "undefined" ? true : showCancel,
+      cancelText: typeof cancelText === "undefined" ? "取消" : cancelText,
+      confirmText: typeof confirmText === "undefined" ? "确定" : confirmText,
+      cancelColor: typeof cancelColor === "undefined" ? "#000000" : cancelColor,
+      confirmColor: typeof confirmColor === "undefined" ? "#576B95" : confirmColor,
+      success: function (res) {
         resolve(res)
       },
-      fail: function() {
+      fail: function () {
         reject('showModal failed')
       }
     })
@@ -196,7 +303,7 @@ function showModal(title, content, handler = {}) {
 
 /**
  * showLoading用法：
- * 1.util.showLoading("加载中")
+ * 1.showLoading("加载中")
  * @param {String} title 
  * @param {Boolean} mask 
  */
@@ -205,11 +312,33 @@ function showLoading(title, mask = false) {
     wx.showToast({
       title: title,
       mask: mask,
-      success: function(res) {
+      success: function (res) {
         resolve(res)
       },
-      fail: function() {
+      fail: function () {
         reject('showLoading failed')
+      }
+    })
+  })
+}
+
+
+/**
+ * showActionSheet用法：
+ * 1.showActionSheet(['A', 'B', 'C']).then((data) => {})
+ * @param {Array.<String>} itemList 
+ * @param {String} itemColor 
+ */
+function showActionSheet(itemList, itemColor = "#000000") {
+  return new Promise((resolve) => {
+    wx.showActionSheet({
+      itemList: itemList,
+      itemColor: itemColor,
+      success: function (res) {
+        resolve(res.tapIndex)
+      },
+      fail: function () {
+        return
       }
     })
   })
@@ -282,7 +411,7 @@ function isNotNull(text) {
 /**
  * 获取日期时间 - getDateTime用法：
  * 1.getDateTime()
- * @param {Date} date 
+ * @param {Date} date 'yy-mm-dd hh:MM:ss'
  */
 function getDateTime(date = new Date()) {
   var year = date.getFullYear()
@@ -321,15 +450,73 @@ function getTimestamp(date = new Date()) {
 }
 
 
+/**
+ * 小程序自动更新 - autoUpdate用法:
+ * 1.autoUpdate()
+ */
+function autoUpdate() {
+  const updateManager = wx.getUpdateManager()
+  updateManager.onCheckForUpdate(function (res) {
+    if (res.hasUpdate) {
+      updateManager.onUpdateReady(function () {
+        showModal("更新提示", "新版本已经准备好，是否重启应用？").then((res) => {
+          if (res.confirm) {
+            updateManager.applyUpdate()
+          }
+        })
+      })
+      updateManager.onUpdateFailed(function () {
+        showModal("更新提示", "新版本已经准备好，请删除当前小程序，重新搜索打开")
+      })
+    }
+  })
+}
+
+
+/**
+ * getLocation用法：
+ * 1.getLocation(type).then((data) => {}).catch((error) => {})
+ * @param {String} type
+ * @param {Boolean} watch
+ */
+function getLocation(type = "gcj02", watch = false) {
+  return new Promise((resolve, reject) => {
+    wx.getLocation({
+      type: type,
+      success: function (res) {
+        resolve(res)
+        const latitude = res.latitude
+        const longitude = res.longitude
+        if (watch) {
+          wx.openLocation({
+            latitude,
+            longitude,
+            scale: 18
+          })
+        }
+      },
+      fail: function () {
+        reject('getLocation failed')
+      }
+    })
+  })
+}
+
+
 module.exports = {
   request: request,
   file: file,
+  socket: socket,
+  image: image,
   showToast: showToast,
   showModal: showModal,
   showLoading: showLoading,
+  showActionSheet: showActionSheet,
   setStorage: setStorage,
   getStorage: getStorage,
   isNotNull: isNotNull,
   getDateTime: getDateTime,
-  getTimestamp: getTimestamp
+  getTimestamp: getTimestamp,
+  autoUpdate: autoUpdate,
+  getLocation: getLocation
 }
