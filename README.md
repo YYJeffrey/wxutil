@@ -1,15 +1,20 @@
-# wxutil ![build](https://img.shields.io/badge/build-passing-00d508.svg) ![license](https://img.shields.io/badge/license-MIT-3963bc.svg) 
+# wxutil 
+![build](https://img.shields.io/badge/build-passing-00d508.svg) ![license](https://img.shields.io/badge/license-MIT-3963bc.svg) 
 
 
 wxutil工具使用promise语法封装了小程序官方的高频API，以及常用的开发方法。
 
 
 ## 快速上手
-在需要使用的位置引入wxutil
+在需要使用的位置引入wxutil（下方示例代码均以该方式引入）
 ```js
-const wxutil = require("/utils/wxutil.js")
+const wxutil = require("../../utils/wxutil.js")
 ```
 
+亦可通过引入自己所需模块来引入该工具
+```js
+import { request } from "../../utils/wxutil.js"
+```
 
 ## 工具模块
 - [网络请求](#网络请求)
@@ -261,7 +266,7 @@ wxutil.getLocation().then((data) => {
 
 亦可通过传入可选参数打开微信小程序的地图
 ```js
-wxutil.getLocation(watch = true).then((data) => {
+wxutil.getLocation("gcj02", true).then((data) => {
     console.log(data)
 })
 ```
