@@ -64,7 +64,7 @@ wxutil.request.post(handler).then((data) => {
 })
 ```
 
-亦可用一下方式请求
+亦可用直接传递参数的方式请求
 ```js
 wxutil.request.post({url: url, data: data}).then((data) => {
     console.log(data)
