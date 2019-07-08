@@ -6,12 +6,12 @@ wxutil工具使用promise语法封装了微信小程序官方的高频API，以�
 
 
 ## 快速上手
-在需要使用的位置引入wxutil（下方示例代码均以该方式引入）
+方法一：在需要使用的位置引入wxutil（下方示例调用代码均以该方法引入）
 ```js
 const wxutil = require("../../utils/wxutil.js")
 ```
 
-亦可通过引入自己所需模块来引入该工具
+方法二：通过导入自己所需模块来引入wxutil
 ```js
 import { request } from "../../utils/wxutil.js"
 ```
