@@ -71,8 +71,8 @@ const request = {
 
 /**
  * file用法：
- * 1.file.download(url).then((data) => {}).catch((error) => {})
- * 2.file.upload({url: url, fileKey: fileKey, filePath: filePath, data: {}, header: {}}).then((data) => {}).catch((error) => {})
+ * 1.file.download(url).then((data) => {})
+ * 2.file.upload({url: url, fileKey: fileKey, filePath: filePath, data: {}, header: {}}).then((data) => {})
  * @param {JSON Object} handler 
  */
 const file = {
@@ -193,9 +193,9 @@ const socket = {
 
 /**
  * image用法：
- * 1.image.save(path).then((data) => {}).catch((error) => {})
+ * 1.image.save(path).then((data) => {})
  * 2.image.preview([])
- * 3.image.choose(1).then((data) => {}).catch((error) => {})
+ * 3.image.choose(1).then((data) => {})
  * @param {JSON Object} handler 
  */
 const image = {
@@ -238,7 +238,7 @@ const image = {
 
 /**
  * showToast用法：
- * 1.showToast("成功")
+ * showToast("成功")
  * @param {String} title 
  * @param {JSON Object} handler 
  */
@@ -269,7 +269,7 @@ function showToast(title, handler = {}) {
 
 /**
  * showModal用法：
- * 1.showModal("提示", "这是一个模态弹窗")
+ * showModal("提示", "这是一个模态弹窗")
  * @param {String} title 
  * @param {String} content 
  * @param {JSON Object} handler 
@@ -304,7 +304,7 @@ function showModal(title, content, handler = {}) {
 
 /**
  * showLoading用法：
- * 1.showLoading("加载中")
+ * showLoading("加载中")
  * @param {String} title 
  * @param {Boolean} mask 
  */
@@ -326,7 +326,7 @@ function showLoading(title, mask = false) {
 
 /**
  * showActionSheet用法：
- * 1.showActionSheet(['A', 'B', 'C']).then((data) => {})
+ * showActionSheet(['A', 'B', 'C']).then((data) => {})
  * @param {Array.<String>} itemList 
  * @param {String} itemColor 
  */
@@ -369,7 +369,7 @@ function setStorage(key, value, time) {
 
 /**
  * getStorage用法：
- * 1.getStorage("userInfo")
+ * getStorage("userInfo")
  * @param {String} key 
  */
 function getStorage(key) {
@@ -384,8 +384,94 @@ function getStorage(key) {
 
 
 /**
+ * getLocation用法：
+ * getLocation().then((data) => {})
+ * @param {String} type
+ * @param {Boolean} watch
+ */
+function getLocation(type = "gcj02", watch = false) {
+  return new Promise((resolve, reject) => {
+    wx.getLocation({
+      type: type,
+      success: function (res) {
+        resolve(res)
+        const latitude = res.latitude
+        const longitude = res.longitude
+        if (watch) {
+          wx.openLocation({
+            latitude,
+            longitude,
+            scale: 18
+          })
+        }
+      },
+      fail: function () {
+        reject('getLocation failed')
+      }
+    })
+  })
+}
+
+
+/**
+ * getUserInfo用法：
+ * getUserInfo(true).then((data) => {})
+ * @param {Boolean} login
+ * @param {String} lang
+ */
+function getUserInfo(login = false, lang = "zh_CN") {
+  let code = null
+  return new Promise((resolve, reject) => {
+    wx.getUserInfo({
+      withCredentials: login,
+      lang: lang,
+      success: function (res) {
+        if (login) {
+          wx.login({
+            success: function (data) {
+              code = data.code
+              res.code = code
+              resolve(res)
+            }
+          })
+        } else {
+          resolve(res)
+        }
+      },
+      fail: function () {
+        reject('getUserInfo failed')
+      }
+    })
+  })
+}
+
+
+/**
+ * 小程序自动更新 - autoUpdate用法:
+ * autoUpdate()
+ */
+function autoUpdate() {
+  const updateManager = wx.getUpdateManager()
+  updateManager.onCheckForUpdate(function (res) {
+    if (res.hasUpdate) {
+      updateManager.onUpdateReady(function () {
+        showModal("更新提示", "新版本已经准备好，是否重启应用？").then((res) => {
+          if (res.confirm) {
+            updateManager.applyUpdate()
+          }
+        })
+      })
+      updateManager.onUpdateFailed(function () {
+        showModal("更新提示", "新版本已经准备好，请删除当前小程序，重新搜索打开")
+      })
+    }
+  })
+}
+
+
+/**
  * 字符串判不为空 - isNotNull用法：
- * 1.isNotNull("text")
+ * isNotNull("text")
  * @param {String} text 字符串
  * @return {Boolean} 字符串合法返回真否则返回假
  */
@@ -411,7 +497,7 @@ function isNotNull(text) {
 
 /**
  * 获取日期时间 - getDateTime用法：
- * 1.getDateTime()
+ * getDateTime()
  * @param {Date} date 'yy-mm-dd hh:MM:ss'
  */
 function getDateTime(date = new Date()) {
@@ -443,64 +529,11 @@ function getDateTime(date = new Date()) {
 
 /**
  * 获取时间戳 - getTimestamp用法：
- * 1.getTimestamp()
+ * getTimestamp()
  * @param {Date} date 
  */
 function getTimestamp(date = new Date()) {
   return date.getTime()
-}
-
-
-/**
- * 小程序自动更新 - autoUpdate用法:
- * 1.autoUpdate()
- */
-function autoUpdate() {
-  const updateManager = wx.getUpdateManager()
-  updateManager.onCheckForUpdate(function (res) {
-    if (res.hasUpdate) {
-      updateManager.onUpdateReady(function () {
-        showModal("更新提示", "新版本已经准备好，是否重启应用？").then((res) => {
-          if (res.confirm) {
-            updateManager.applyUpdate()
-          }
-        })
-      })
-      updateManager.onUpdateFailed(function () {
-        showModal("更新提示", "新版本已经准备好，请删除当前小程序，重新搜索打开")
-      })
-    }
-  })
-}
-
-
-/**
- * getLocation用法：
- * 1.getLocation(type).then((data) => {}).catch((error) => {})
- * @param {String} type
- * @param {Boolean} watch
- */
-function getLocation(type = "gcj02", watch = false) {
-  return new Promise((resolve, reject) => {
-    wx.getLocation({
-      type: type,
-      success: function (res) {
-        resolve(res)
-        const latitude = res.latitude
-        const longitude = res.longitude
-        if (watch) {
-          wx.openLocation({
-            latitude,
-            longitude,
-            scale: 18
-          })
-        }
-      },
-      fail: function () {
-        reject('getLocation failed')
-      }
-    })
-  })
 }
 
 
@@ -515,9 +548,10 @@ module.exports = {
   showActionSheet: showActionSheet,
   setStorage: setStorage,
   getStorage: getStorage,
+  getLocation: getLocation,
+  getUserInfo: getUserInfo,
+  autoUpdate: autoUpdate,
   isNotNull: isNotNull,
   getDateTime: getDateTime,
-  getTimestamp: getTimestamp,
-  autoUpdate: autoUpdate,
-  getLocation: getLocation
+  getTimestamp: getTimestamp
 }

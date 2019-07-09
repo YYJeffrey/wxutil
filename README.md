@@ -27,6 +27,7 @@ import { request } from "../../utils/wxutil.js"
     - [showLoading](#showLoading)
     - [showActionSheet](#showActionSheet)
 - [缓存](#缓存)
+- [授权](#授权)
 - [其他工具](#其他工具)
 
 
@@ -227,8 +228,34 @@ wxutil.getStorage("userInfo")
 ```
 
 
+## 授权
+封装了需要用户授权微信小程序的方法
+
+### getLocation
+获取用户的地理位置
+```js
+wxutil.getLocation().then((data) => {
+    console.log(data)
+})
+```
+
+### getLocation
+获取用户信息，可传递两个参数：login和lang，login为true可返回wx.login获取到的code，lang默认为中文，该方法需要使用button触发
+```js
+wxutil.getUserInfo().then((data) => {
+    console.log(data)
+})
+```
+
+
 ## 其他工具
-封装了常用的小程序方法，便于高效开发，也可以增加自己的工具方法在下方
+封装了常用的微信小程序方法，便于高效开发，也可以增加自己的工具方法在下方
+
+### autoUpdate
+在app.js中引用该方法，可以在微信小程序发布新版本后自动更新
+```js
+wxutil.autoUpdate()
+```
 
 ### isNotNull
 判断字符串是否为空、空格回车等，不为空返回true
@@ -248,20 +275,6 @@ console.log(datetime)
 ```js
 const timestamp = wxutil.getTimestamp()
 console.log(timestamp)
-```
-
-### autoUpdate
-小程序自动更新，在app.js中引用该方法，可以在小程序发布新版本后自动更新
-```js
-wxutil.autoUpdate()
-```
-
-### getLocation
-获取用户的地理位置
-```js
-wxutil.getLocation().then((data) => {
-    console.log(data)
-})
 ```
 
 亦可通过传入可选参数打开微信小程序的地图
