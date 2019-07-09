@@ -27,7 +27,11 @@ import { request } from "../../utils/wxutil.js"
     - [showLoading](#showLoading)
     - [showActionSheet](#showActionSheet)
 - [缓存](#缓存)
+    - [setStorage](#setStorage)
+    - [getStorage](#getStorage)
 - [授权](#授权)
+    - [getLocation](#getLocation)
+    - [getUserInfo](#getUserInfo)
 - [其他工具](#其他工具)
 
 
@@ -239,7 +243,14 @@ wxutil.getLocation().then((data) => {
 })
 ```
 
-### getLocation
+亦可通过传入可选参数打开微信小程序的地图
+```js
+wxutil.getLocation("gcj02", true).then((data) => {
+    console.log(data)
+})
+```
+
+### getUserInfo
 获取用户信息，可传递两个参数：login和lang，login为true可返回wx.login获取到的code，lang默认为中文，该方法需要使用button触发
 ```js
 wxutil.getUserInfo().then((data) => {
@@ -275,11 +286,4 @@ console.log(datetime)
 ```js
 const timestamp = wxutil.getTimestamp()
 console.log(timestamp)
-```
-
-亦可通过传入可选参数打开微信小程序的地图
-```js
-wxutil.getLocation("gcj02", true).then((data) => {
-    console.log(data)
-})
 ```
