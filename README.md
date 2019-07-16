@@ -32,6 +32,7 @@ import { request } from "../../utils/wxutil.js"
 - [授权](#授权)
     - [getLocation](#getLocation)
     - [getUserInfo](#getUserInfo)
+    - [requestPayment](#requestPayment)
 - [其他工具](#其他工具)
 
 
@@ -132,11 +133,11 @@ let socketOpen = false  // socket连接标识
 wxutil.socket.connect(url)
 
 // 监听socket通信
-wx.onSocketMessage(function(res) {
+wx.onSocketMessage((res) => {
     console.log(res)  
 }
 
-wx.onSocketOpen(function(res) {
+wx.onSocketOpen((res) => {
     socketOpen = true
     if (socketOpen) {
         // 发送socket消息
@@ -254,6 +255,19 @@ wxutil.getLocation("gcj02", true).then((data) => {
 获取用户信息，可传递两个参数：login和lang，login为true可返回wx.login获取到的code，lang默认为中文，该方法需要使用button触发
 ```js
 wxutil.getUserInfo().then((data) => {
+    console.log(data)
+})
+```
+
+### requestPayment
+封装了微信小程序的requestPayment方法，需要传递后端的timeStamp、nonceStr、packageValue、paySign这几个参数，加密方式默认为“MD5”
+```js
+wxutil.requestPayment({
+    timeStamp: timeStamp,
+    nonceStr: nonceStr,
+    packageValue: packageValue,
+    paySign: paySign
+}).then((data) => {
     console.log(data)
 })
 ```

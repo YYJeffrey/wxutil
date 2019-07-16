@@ -15,7 +15,7 @@
  * @param {JSON Object} handler 
  */
 const request = {
-  get: function (handler) {
+  get(handler) {
     if (typeof handler === "string") {
       handler = {
         url: String(handler),
@@ -25,24 +25,24 @@ const request = {
     return this.Request("GET", handler)
   },
 
-  post: function (handler) {
+  post(handler) {
     return this.Request("POST", handler)
   },
 
-  put: function (handler) {
+  put(handler) {
     return this.Request("PUT", handler)
   },
 
-  patch: function (handler) {
+  patch(handler) {
     return this.Request("PATCH", handler)
   },
 
-  delete: function (handler) {
+  delete(handler) {
     return this.Request("DELETE", handler)
   },
 
   // RequestHandler
-  Request: function (method, handler) {
+  Request(method, handler) {
     const {
       url,
       data,
@@ -57,10 +57,10 @@ const request = {
         data: data,
         header: Object.assign(head, header),
         method: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'].indexOf(method) > -1 ? method : 'GET',
-        success: function (res) {
+        success(res) {
           resolve(res)
         },
-        fail: function () {
+        fail() {
           reject('request failed')
         }
       })
@@ -76,7 +76,7 @@ const request = {
  * @param {JSON Object} handler 
  */
 const file = {
-  download: function (handler) {
+  download(handler) {
     if (typeof handler === "string") {
       handler = {
         url: String(handler)
@@ -92,17 +92,17 @@ const file = {
         url: url,
         filePath: filePath,
         header: header,
-        success: function (res) {
+        success(res) {
           resolve(res)
         },
-        fail: function () {
+        fail() {
           reject('downloadFile failed')
         }
       })
     })
   },
 
-  upload: function (handler) {
+  upload(handler) {
     const {
       url,
       fileKey,
@@ -117,10 +117,10 @@ const file = {
         filePath: filePath,
         formData: data,
         header: header,
-        success: function (res) {
+        success(res) {
           resolve(res)
         },
-        fail: function () {
+        fail() {
           reject('uploadFile failed')
         }
       })
@@ -134,18 +134,18 @@ const file = {
  * let socketOpen = false
  * socket.connect(url)
  * 
- * wx.onSocketMessage(function(res) {
+ * wx.onSocketMessage((res) => {
  *  console.log(res)  
  * }
  * 
- * wx.onSocketOpen(function(res) {
+ * wx.onSocketOpen((res) => {
  *  socketOpen = true
  *  if socketOpen: socket.send("hello").then((data) => {})
  *  socket.close(url) || wx.closeSocket()
  * })
  */
 const socket = {
-  connect: function (url, handler = {}) {
+  connect(url, handler = {}) {
     const {
       header,
       protocols
@@ -158,10 +158,10 @@ const socket = {
         url: url,
         header: Object.assign(head, header),
         protocols: typeof protocols === "undefined" ? [] : protocols,
-        success: function (res) {
+        success(res) {
           resolve(res)
         },
-        fail: function () {
+        fail() {
           reject('connect failed')
         }
       })
@@ -169,21 +169,21 @@ const socket = {
   },
 
   // 需在onSocketOpen回调内使用
-  send: function (data) {
+  send(data) {
     return new Promise((resolve, reject) => {
       wx.sendSocketMessage({
         data: data,
-        success: function (res) {
+        success(res) {
           resolve(res)
         },
-        fail: function () {
+        fail() {
           reject('sendSocket failed')
         }
       })
     })
   },
 
-  close: function (url) {
+  close(url) {
     wx.connectSocket({
       url: url
     })
@@ -199,35 +199,35 @@ const socket = {
  * @param {JSON Object} handler 
  */
 const image = {
-  save: function (path) {
+  save(path) {
     return new Promise((resolve, reject) => {
       wx.saveImageToPhotosAlbum({
         filePath: path,
-        success: function (res) {
+        success(res) {
           resolve(res)
         },
-        fail: function () {
+        fail() {
           reject('saveImage failed')
         }
       })
     })
   },
 
-  preview: function (urls) {
+  preview(urls) {
     wx.previewImage({
       urls: urls
     })
   },
 
-  choose: function (count = 9, sourceType = ['album', 'camera']) {
+  choose(count = 9, sourceType = ['album', 'camera']) {
     return new Promise((resolve, reject) => {
       wx.chooseImage({
         count: count,
         sourceType: sourceType,
-        success: function (res) {
+        success(res) {
           resolve(res)
         },
-        fail: function () {
+        fail() {
           reject('chooseImage failed')
         }
       })
@@ -242,7 +242,7 @@ const image = {
  * @param {String} title 
  * @param {JSON Object} handler 
  */
-function showToast(title, handler = {}) {
+const showToast = (title, handler = {}) => {
   const {
     icon,
     image,
@@ -256,10 +256,10 @@ function showToast(title, handler = {}) {
       icon: typeof icon === "undefined" ? "none" : icon,
       duration: typeof duration === "undefined" ? 1000 : duration,
       mask: typeof mask === "undefined" ? true : mask,
-      success: function (res) {
+      success(res) {
         resolve(res)
       },
-      fail: function () {
+      fail() {
         reject('showToast failed')
       }
     })
@@ -274,7 +274,7 @@ function showToast(title, handler = {}) {
  * @param {String} content 
  * @param {JSON Object} handler 
  */
-function showModal(title, content, handler = {}) {
+const showModal = (title, content, handler = {}) => {
   const {
     showCancel,
     cancelText,
@@ -291,10 +291,10 @@ function showModal(title, content, handler = {}) {
       confirmText: typeof confirmText === "undefined" ? "确定" : confirmText,
       cancelColor: typeof cancelColor === "undefined" ? "#000000" : cancelColor,
       confirmColor: typeof confirmColor === "undefined" ? "#576B95" : confirmColor,
-      success: function (res) {
+      success(res) {
         resolve(res)
       },
-      fail: function () {
+      fail() {
         reject('showModal failed')
       }
     })
@@ -308,15 +308,15 @@ function showModal(title, content, handler = {}) {
  * @param {String} title 
  * @param {Boolean} mask 
  */
-function showLoading(title, mask = false) {
+const showLoading = (title, mask = false) => {
   return new Promise((resolve, reject) => {
     wx.showToast({
       title: title,
       mask: mask,
-      success: function (res) {
+      success(res) {
         resolve(res)
       },
-      fail: function () {
+      fail() {
         reject('showLoading failed')
       }
     })
@@ -330,15 +330,15 @@ function showLoading(title, mask = false) {
  * @param {Array.<String>} itemList 
  * @param {String} itemColor 
  */
-function showActionSheet(itemList, itemColor = "#000000") {
+const showActionSheet = (itemList, itemColor = "#000000") => {
   return new Promise((resolve) => {
     wx.showActionSheet({
       itemList: itemList,
       itemColor: itemColor,
-      success: function (res) {
+      success(res) {
         resolve(res.tapIndex)
       },
-      fail: function () {
+      fail() {
         return
       }
     })
@@ -354,7 +354,7 @@ function showActionSheet(itemList, itemColor = "#000000") {
  * @param {Object} value 
  * @param {Int} time 过期时间，可选参数
  */
-function setStorage(key, value, time) {
+const setStorage = (key, value, time) => {
   const dtime = "_deadtime"
   wx.setStorageSync(key, value)
   const seconds = parseInt(time)
@@ -372,7 +372,7 @@ function setStorage(key, value, time) {
  * getStorage("userInfo")
  * @param {String} key 
  */
-function getStorage(key) {
+const getStorage = (key) => {
   const dtime = "_deadtime"
   const deadtime = parseInt(wx.getStorageSync(key + dtime))
   if (deadtime && Date.parse(new Date()) / 1000 > parseInt(deadtime)) {
@@ -389,11 +389,11 @@ function getStorage(key) {
  * @param {String} type
  * @param {Boolean} watch
  */
-function getLocation(type = "gcj02", watch = false) {
+const getLocation = (type = "gcj02", watch = false) => {
   return new Promise((resolve, reject) => {
     wx.getLocation({
       type: type,
-      success: function (res) {
+      success(res) {
         resolve(res)
         const latitude = res.latitude
         const longitude = res.longitude
@@ -405,7 +405,7 @@ function getLocation(type = "gcj02", watch = false) {
           })
         }
       },
-      fail: function () {
+      fail() {
         reject('getLocation failed')
       }
     })
@@ -419,16 +419,16 @@ function getLocation(type = "gcj02", watch = false) {
  * @param {Boolean} login
  * @param {String} lang
  */
-function getUserInfo(login = false, lang = "zh_CN") {
+const getUserInfo = (login = false, lang = "zh_CN") => {
   let code = null
   return new Promise((resolve, reject) => {
     wx.getUserInfo({
       withCredentials: login,
       lang: lang,
-      success: function (res) {
+      success(res) {
         if (login) {
           wx.login({
-            success: function (data) {
+            success(data) {
               code = data.code
               res.code = code
               resolve(res)
@@ -438,8 +438,38 @@ function getUserInfo(login = false, lang = "zh_CN") {
           resolve(res)
         }
       },
-      fail: function () {
+      fail() {
         reject('getUserInfo failed')
+      }
+    })
+  })
+}
+
+
+/**
+ * 微信支付 - requestPayment用法:
+ * requestPayment({timeStamp: timeStamp, nonceStr: nonceStr, packageValue: packageValue, paySign: paySign}).then((data) => {})
+ * @param {JSON} handler 
+ */
+const requestPayment = (handler) => {
+  const {
+    timeStamp,
+    nonceStr,
+    packageValue,
+    paySign
+  } = handler
+  return new Promise((resolve, reject) => {
+    wx.requestPayment({
+      timeStamp: timeStamp,
+      nonceStr: nonceStr,
+      package: packageValue,
+      paySign: paySign,
+      signType: typeof signType === "undefined" ? "MD5" : signType,
+      success(res) {
+        resolve(res)
+      },
+      fail() {
+        reject('requestPayment failed')
       }
     })
   })
@@ -450,18 +480,18 @@ function getUserInfo(login = false, lang = "zh_CN") {
  * 小程序自动更新 - autoUpdate用法:
  * autoUpdate()
  */
-function autoUpdate() {
+const autoUpdate = () => {
   const updateManager = wx.getUpdateManager()
-  updateManager.onCheckForUpdate(function (res) {
+  updateManager.onCheckForUpdate((res) => {
     if (res.hasUpdate) {
-      updateManager.onUpdateReady(function () {
+      updateManager.onUpdateReady(() => {
         showModal("更新提示", "新版本已经准备好，是否重启应用？").then((res) => {
           if (res.confirm) {
             updateManager.applyUpdate()
           }
         })
       })
-      updateManager.onUpdateFailed(function () {
+      updateManager.onUpdateFailed(() => {
         showModal("更新提示", "新版本已经准备好，请删除当前小程序，重新搜索打开")
       })
     }
@@ -475,7 +505,7 @@ function autoUpdate() {
  * @param {String} text 字符串
  * @return {Boolean} 字符串合法返回真否则返回假
  */
-function isNotNull(text) {
+const isNotNull = (text) => {
   if (text == null) {
     return false;
   }
@@ -500,7 +530,7 @@ function isNotNull(text) {
  * getDateTime()
  * @param {Date} date 'yy-mm-dd hh:MM:ss'
  */
-function getDateTime(date = new Date()) {
+const getDateTime = (date = new Date()) => {
   var year = date.getFullYear()
   var month = date.getMonth() + 1
   var day = date.getDate()
@@ -532,7 +562,7 @@ function getDateTime(date = new Date()) {
  * getTimestamp()
  * @param {Date} date 
  */
-function getTimestamp(date = new Date()) {
+const getTimestamp = (date = new Date()) => {
   return date.getTime()
 }
 
@@ -550,6 +580,7 @@ module.exports = {
   getStorage: getStorage,
   getLocation: getLocation,
   getUserInfo: getUserInfo,
+  requestPayment: requestPayment,
   autoUpdate: autoUpdate,
   isNotNull: isNotNull,
   getDateTime: getDateTime,
