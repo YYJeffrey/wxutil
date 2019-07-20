@@ -456,7 +456,8 @@ const requestPayment = (handler) => {
     timeStamp,
     nonceStr,
     packageValue,
-    paySign
+    paySign,
+    signType
   } = handler
   return new Promise((resolve, reject) => {
     wx.requestPayment({
