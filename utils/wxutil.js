@@ -4,50 +4,46 @@
  * @Github: https://github.com/YYJeffrey/wxutil
  */
 
-
 /**
  * request用法：
  * 1.request.get(url).then((data) => {}).catch((error) => {})
- * 2.request.post({url: url, data: {}, header: {}}).then((data) => {}).catch((error) => {})
- * 3.request.put({url: url, data: {}, header: {}}).then((data) => {}).catch((error) => {})
- * 4.request.patch({url: url, data: {}, header: {}}).then((data) => {}).catch((error) => {})
- * 5.request.delete({url: url, data: {}, header: {}}).then((data) => {}).catch((error) => {})
- * @param {JSON Object} handler 
+ * 2.request.post(url, data = {}, header = {}).then((data) => {}).catch((error) => {})
+ * 3.request.put(url, data = {}, header = {}).then((data) => {}).catch((error) => {})
+ * 4.request.patch(url, data = {}, header = {}).then((data) => {}).catch((error) => {})
+ * 5.request.delete(url, data = {}, header = {}).then((data) => {}).catch((error) => {})
+ * @param {String} url
+ * @param {JSON Object} data
+ * @param {JSON Object} header
  */
 const request = {
-  get(handler) {
-    if (typeof handler === "string") {
-      handler = {
-        url: String(handler),
-        data: {}
-      }
-    }
-    return this.Request("GET", handler)
+  get(url, data = {}, header = {}) {
+    const handler = { url, data, header }
+    return this.Request('GET', handler)
   },
 
-  post(handler) {
-    return this.Request("POST", handler)
+  post(url, data = {}, header = {}) {
+    const handler = { url, data, header }
+    return this.Request('POST', handler)
   },
 
-  put(handler) {
-    return this.Request("PUT", handler)
+  put(url, data = {}, header = {}) {
+    const handler = { url, data, header }
+    return this.Request('PUT', handler)
   },
 
-  patch(handler) {
-    return this.Request("PATCH", handler)
+  patch(url, data = {}, header = {}) {
+    const handler = { url, data, header }
+    return this.Request('PATCH', handler)
   },
 
-  delete(handler) {
-    return this.Request("DELETE", handler)
+  delete(url, data = {}, header = {}) {
+    const handler = { url, data, header }
+    return this.Request('DELETE', handler)
   },
 
   // RequestHandler
   Request(method, handler) {
-    const {
-      url,
-      data,
-      header
-    } = handler;
+    const { url, data, header } = handler
     const head = {
       'content-type': 'application/json'
     }
@@ -56,7 +52,10 @@ const request = {
         url: url,
         data: data,
         header: Object.assign(head, header),
-        method: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'].indexOf(method) > -1 ? method : 'GET',
+        method:
+          ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'].indexOf(method) > -1
+            ? method
+            : 'GET',
         success(res) {
           resolve(res)
         },
@@ -68,25 +67,20 @@ const request = {
   }
 }
 
-
 /**
  * file用法：
  * 1.file.download(url).then((data) => {})
  * 2.file.upload({url: url, fileKey: fileKey, filePath: filePath, data: {}, header: {}}).then((data) => {})
- * @param {JSON Object} handler 
+ * @param {JSON Object} handler
  */
 const file = {
   download(handler) {
-    if (typeof handler === "string") {
+    if (typeof handler === 'string') {
       handler = {
         url: String(handler)
       }
     }
-    const {
-      url,
-      filePath,
-      header
-    } = handler
+    const { url, filePath, header } = handler
     return new Promise((resolve, reject) => {
       wx.downloadFile({
         url: url,
@@ -103,13 +97,7 @@ const file = {
   },
 
   upload(handler) {
-    const {
-      url,
-      fileKey,
-      filePath,
-      data,
-      header
-    } = handler
+    const { url, fileKey, filePath, data, header } = handler
     return new Promise((resolve, reject) => {
       wx.uploadFile({
         url: url,
@@ -128,28 +116,27 @@ const file = {
   }
 }
 
-
 /**
  * socket用法：
  * let socketOpen = false
  * socket.connect(url)
- * 
+ *
  * wx.onSocketMessage((res) => {
- *  console.log(res)  
+ *  console.log(res)
  * }
- * 
+ *
  * wx.onSocketOpen((res) => {
  *  socketOpen = true
  *  if socketOpen: socket.send("hello").then((data) => {})
  *  socket.close(url) || wx.closeSocket()
  * })
+ * @param {String} url
+ * @param {JSON Object} handler
+ * @param {JSON Object} data
  */
 const socket = {
   connect(url, handler = {}) {
-    const {
-      header,
-      protocols
-    } = handler
+    const { header, protocols } = handler
     const head = {
       'content-type': 'application/json'
     }
@@ -157,7 +144,7 @@ const socket = {
       wx.connectSocket({
         url: url,
         header: Object.assign(head, header),
-        protocols: typeof protocols === "undefined" ? [] : protocols,
+        protocols: typeof protocols === 'undefined' ? [] : protocols,
         success(res) {
           resolve(res)
         },
@@ -190,13 +177,13 @@ const socket = {
   }
 }
 
-
 /**
  * image用法：
  * 1.image.save(path).then((data) => {})
  * 2.image.preview([])
  * 3.image.choose(1).then((data) => {})
- * @param {JSON Object} handler 
+ * @param {String} path
+ * @param {JSON Object} urls
  */
 const image = {
   save(path) {
@@ -232,30 +219,24 @@ const image = {
         }
       })
     })
-  },
+  }
 }
-
 
 /**
  * showToast用法：
  * showToast("成功")
- * @param {String} title 
- * @param {JSON Object} handler 
+ * @param {String} title
+ * @param {JSON Object} handler
  */
 const showToast = (title, handler = {}) => {
-  const {
-    icon,
-    image,
-    duration,
-    mask,
-  } = handler
+  const { icon, image, duration, mask } = handler
   return new Promise((resolve, reject) => {
     wx.showToast({
       title: title,
       image: image,
-      icon: typeof icon === "undefined" ? "none" : icon,
-      duration: typeof duration === "undefined" ? 1000 : duration,
-      mask: typeof mask === "undefined" ? true : mask,
+      icon: typeof icon === 'undefined' ? 'none' : icon,
+      duration: typeof duration === 'undefined' ? 1000 : duration,
+      mask: typeof mask === 'undefined' ? true : mask,
       success(res) {
         resolve(res)
       },
@@ -266,13 +247,12 @@ const showToast = (title, handler = {}) => {
   })
 }
 
-
 /**
  * showModal用法：
  * showModal("提示", "这是一个模态弹窗")
- * @param {String} title 
- * @param {String} content 
- * @param {JSON Object} handler 
+ * @param {String} title
+ * @param {String} content
+ * @param {JSON Object} handler
  */
 const showModal = (title, content, handler = {}) => {
   const {
@@ -280,17 +260,18 @@ const showModal = (title, content, handler = {}) => {
     cancelText,
     confirmText,
     cancelColor,
-    confirmColor,
+    confirmColor
   } = handler
   return new Promise((resolve, reject) => {
     wx.showModal({
       title: title,
       content: content,
-      showCancel: typeof showCancel === "undefined" ? true : showCancel,
-      cancelText: typeof cancelText === "undefined" ? "取消" : cancelText,
-      confirmText: typeof confirmText === "undefined" ? "确定" : confirmText,
-      cancelColor: typeof cancelColor === "undefined" ? "#000000" : cancelColor,
-      confirmColor: typeof confirmColor === "undefined" ? "#576B95" : confirmColor,
+      showCancel: typeof showCancel === 'undefined' ? true : showCancel,
+      cancelText: typeof cancelText === 'undefined' ? '取消' : cancelText,
+      confirmText: typeof confirmText === 'undefined' ? '确定' : confirmText,
+      cancelColor: typeof cancelColor === 'undefined' ? '#000000' : cancelColor,
+      confirmColor:
+        typeof confirmColor === 'undefined' ? '#576B95' : confirmColor,
       success(res) {
         resolve(res)
       },
@@ -301,12 +282,11 @@ const showModal = (title, content, handler = {}) => {
   })
 }
 
-
 /**
  * showLoading用法：
  * showLoading("加载中")
- * @param {String} title 
- * @param {Boolean} mask 
+ * @param {String} title
+ * @param {Boolean} mask
  */
 const showLoading = (title, mask = false) => {
   return new Promise((resolve, reject) => {
@@ -323,15 +303,14 @@ const showLoading = (title, mask = false) => {
   })
 }
 
-
 /**
  * showActionSheet用法：
  * showActionSheet(['A', 'B', 'C']).then((data) => {})
- * @param {Array.<String>} itemList 
- * @param {String} itemColor 
+ * @param {Array.<String>} itemList
+ * @param {String} itemColor
  */
-const showActionSheet = (itemList, itemColor = "#000000") => {
-  return new Promise((resolve) => {
+const showActionSheet = (itemList, itemColor = '#000000') => {
+  return new Promise(resolve => {
     wx.showActionSheet({
       itemList: itemList,
       itemColor: itemColor,
@@ -345,35 +324,33 @@ const showActionSheet = (itemList, itemColor = "#000000") => {
   })
 }
 
-
 /**
  * setStorage用法：
  * 1.setStorage("userInfo", userInfo)
  * 2.setStorage("userInfo", userInfo, 86400)
- * @param {String} key 
- * @param {Object} value 
+ * @param {String} key
+ * @param {Object} value
  * @param {Int} time 过期时间，可选参数
  */
 const setStorage = (key, value, time) => {
-  const dtime = "_deadtime"
+  const dtime = '_deadtime'
   wx.setStorageSync(key, value)
   const seconds = parseInt(time)
   if (seconds > 0) {
     let timestamp = Date.parse(new Date()) / 1000 + seconds
-    wx.setStorageSync(key + dtime, timestamp + "")
+    wx.setStorageSync(key + dtime, timestamp + '')
   } else {
-    wx.removeStorageSync(key + dtime);
+    wx.removeStorageSync(key + dtime)
   }
 }
-
 
 /**
  * getStorage用法：
  * getStorage("userInfo")
- * @param {String} key 
+ * @param {String} key
  */
-const getStorage = (key) => {
-  const dtime = "_deadtime"
+const getStorage = key => {
+  const dtime = '_deadtime'
   const deadtime = parseInt(wx.getStorageSync(key + dtime))
   if (deadtime && Date.parse(new Date()) / 1000 > parseInt(deadtime)) {
     return null
@@ -382,14 +359,13 @@ const getStorage = (key) => {
   return res ? res : null
 }
 
-
 /**
  * getLocation用法：
  * getLocation().then((data) => {})
  * @param {String} type
  * @param {Boolean} watch
  */
-const getLocation = (type = "gcj02", watch = false) => {
+const getLocation = (type = 'gcj02', watch = false) => {
   return new Promise((resolve, reject) => {
     wx.getLocation({
       type: type,
@@ -412,14 +388,13 @@ const getLocation = (type = "gcj02", watch = false) => {
   })
 }
 
-
 /**
  * getUserInfo用法：
  * getUserInfo(true).then((data) => {})
  * @param {Boolean} login
  * @param {String} lang
  */
-const getUserInfo = (login = false, lang = "zh_CN") => {
+const getUserInfo = (login = false, lang = 'zh_CN') => {
   let code = null
   return new Promise((resolve, reject) => {
     wx.getUserInfo({
@@ -445,27 +420,20 @@ const getUserInfo = (login = false, lang = "zh_CN") => {
   })
 }
 
-
 /**
  * 微信支付 - requestPayment用法:
  * requestPayment({timeStamp: timeStamp, nonceStr: nonceStr, packageValue: packageValue, paySign: paySign}).then((data) => {})
- * @param {JSON} handler 
+ * @param {JSON Object} handler
  */
-const requestPayment = (handler) => {
-  const {
-    timeStamp,
-    nonceStr,
-    packageValue,
-    paySign,
-    signType
-  } = handler
+const requestPayment = handler => {
+  const { timeStamp, nonceStr, packageValue, paySign, signType } = handler
   return new Promise((resolve, reject) => {
     wx.requestPayment({
       timeStamp: timeStamp,
       nonceStr: nonceStr,
       package: packageValue,
       paySign: paySign,
-      signType: typeof signType === "undefined" ? "MD5" : signType,
+      signType: typeof signType === 'undefined' ? 'MD5' : signType,
       success(res) {
         resolve(res)
       },
@@ -476,29 +444,30 @@ const requestPayment = (handler) => {
   })
 }
 
-
 /**
  * 小程序自动更新 - autoUpdate用法:
  * autoUpdate()
  */
 const autoUpdate = () => {
   const updateManager = wx.getUpdateManager()
-  updateManager.onCheckForUpdate((res) => {
+  updateManager.onCheckForUpdate(res => {
     if (res.hasUpdate) {
       updateManager.onUpdateReady(() => {
-        showModal("更新提示", "新版本已经准备好，是否重启应用？").then((res) => {
+        showModal('更新提示', '新版本已经准备好，是否重启应用？').then(res => {
           if (res.confirm) {
             updateManager.applyUpdate()
           }
         })
       })
       updateManager.onUpdateFailed(() => {
-        showModal("更新提示", "新版本已经准备好，请删除当前小程序，重新搜索打开")
+        showModal(
+          '更新提示',
+          '新版本已经准备好，请删除当前小程序，重新搜索打开'
+        )
       })
     }
   })
 }
-
 
 /**
  * 字符串判不为空 - isNotNull用法：
@@ -506,25 +475,24 @@ const autoUpdate = () => {
  * @param {String} text 字符串
  * @return {Boolean} 字符串合法返回真否则返回假
  */
-const isNotNull = (text) => {
+const isNotNull = text => {
   if (text == null) {
-    return false;
+    return false
   }
   if (text.match(/^\s+$/)) {
-    return false;
+    return false
   }
   if (text.match(/^\s*$/)) {
-    return false;
+    return false
   }
   if (text.match(/^[ ]+$/)) {
-    return false;
+    return false
   }
   if (text.match(/^[ ]*$/)) {
-    return false;
+    return false
   }
-  return true;
+  return true
 }
-
 
 /**
  * 获取日期时间 - getDateTime用法：
@@ -540,33 +508,33 @@ const getDateTime = (date = new Date()) => {
   var second = date.getSeconds()
 
   if (month >= 1 && month <= 9) {
-    month = "0" + month
+    month = '0' + month
   }
   if (day >= 0 && day <= 9) {
-    day = "0" + day
+    day = '0' + day
   }
   if (hour >= 0 && hour <= 9) {
-    hour = "0" + hour
+    hour = '0' + hour
   }
   if (minute >= 0 && minute <= 9) {
-    minute = "0" + minute
+    minute = '0' + minute
   }
   if (second >= 0 && second <= 9) {
-    second = "0" + second
+    second = '0' + second
   }
-  return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second
+  return (
+    year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
+  )
 }
-
 
 /**
  * 获取时间戳 - getTimestamp用法：
  * getTimestamp()
- * @param {Date} date 
+ * @param {Date} date
  */
 const getTimestamp = (date = new Date()) => {
   return date.getTime()
 }
-
 
 module.exports = {
   request: request,

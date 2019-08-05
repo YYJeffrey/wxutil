@@ -40,68 +40,50 @@ import { request } from "../../utils/wxutil.js"
 封装微信小程序wx.request()方法实现五大http请求方法
 
 ### get
-使用promise语法异步获取请求数据或捕获请求异常信息
-```js
-const handler = {
-    url: url,
-    data: data,
-    header: header
-} 
-
-wxutil.request.get(handler).then((data) => {
-    console.log(data)  // 业务处理
-}).catch((error) => {
-    console.log(error) // 异常处理
-})
-```
-
-亦可用更快速的方法请求
+通过直接调用url获取请求
 ```js
 wxutil.request.get(url).then((data) => {
     console.log(data)
 })
 ```
 
-### post
+使用promise异步获取请求数据并捕获请求异常
 ```js
-const handler = {
-    url: url,
-    data: {},
-    header: {}
-}
-
-wxutil.request.post(handler).then((data) => {
-    console.log(data)
+wxutil.request.get(url, data = {}, header = {}).then((data) => {
+    console.log(data)     // 业务处理
+}).catch((error) => {
+    console.log(error)    // 异常处理
 })
 ```
 
-亦可用直接传递参数的方式请求
+### post
 ```js
-wxutil.request.post({url: url, data: data}).then((data) => {
+wxutil.request.post(url, data = {}, header = {}).then((data) => {
     console.log(data)
 })
 ```
 
 ### put
 ```js
-wxutil.request.put({url: url, data: data}).then((data) => {
+wxutil.request.put(url, data = {}, header = {}).then((data) => {
     console.log(data)
 })
 ```
 
 ### patch
 ```js
-wxutil.request.patch({url: url, data: data}).then((data) => {
+wxutil.request.patch(url, data = {}, header = {}).then((data) => {
     console.log(data)
 })
 ```
 
 ### delete
 ```js
-wxutil.request.delete({url: url, data: data}).then((data) => {
+wxutil.request.delete(url, data = {}, header = {}).then((data) => {
     console.log(data)
 })
 ```
+
 
 ## 文件请求
 封装微信小程序wx.downloadFile()和wx.uploadFile()方法
@@ -125,6 +107,7 @@ wxutil.file.upload({
     console.log(data)
 })
 ```
+
 
 ## socket通信
 封装微信小程序的websocket部分方法，实现整个socket流程如下
