@@ -118,7 +118,7 @@ wxutil.socket.connect(url)
 // 监听socket通信
 wx.onSocketMessage((res) => {
     console.log(res)  
-}
+})
 
 wx.onSocketOpen((res) => {
     socketOpen = true
