@@ -356,6 +356,9 @@ const getStorage = key => {
     return null
   }
   const res = wx.getStorageSync(key)
+  if (typeof (res) == "boolean") {
+    return res
+  }
   return res ? res : null
 }
 
