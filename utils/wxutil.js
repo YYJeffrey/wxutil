@@ -9,8 +9,7 @@
  * 1.request.get(url).then((data) => {}).catch((error) => {})
  * 2.request.post(url, data = {}, header = {}).then((data) => {}).catch((error) => {})
  * 3.request.put(url, data = {}, header = {}).then((data) => {}).catch((error) => {})
- * 4.request.patch(url, data = {}, header = {}).then((data) => {}).catch((error) => {})
- * 5.request.delete(url, data = {}, header = {}).then((data) => {}).catch((error) => {})
+ * 4.request.delete(url, data = {}, header = {}).then((data) => {}).catch((error) => {})
  * @param {String} url
  * @param {JSON Object} data
  * @param {JSON Object} header
@@ -31,11 +30,6 @@ const request = {
     return this.Request('PUT', handler)
   },
 
-  patch(url, data = {}, header = {}) {
-    const handler = { url, data, header }
-    return this.Request('PATCH', handler)
-  },
-
   delete(url, data = {}, header = {}) {
     const handler = { url, data, header }
     return this.Request('DELETE', handler)
@@ -44,7 +38,7 @@ const request = {
   // RequestHandler
   Request(method, handler) {
     const { url, data, header } = handler
-    const head = {
+    let head = {
       'content-type': 'application/json'
     }
     return new Promise((resolve, reject) => {
@@ -52,10 +46,7 @@ const request = {
         url: url,
         data: data,
         header: Object.assign(head, header),
-        method:
-          ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'].indexOf(method) > -1
-            ? method
-            : 'GET',
+        method: ['GET', 'POST', 'PUT', 'DELETE'].indexOf(method) > -1 ? method : 'GET',
         success(res) {
           resolve(res)
         },
