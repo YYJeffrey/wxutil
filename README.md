@@ -70,13 +70,6 @@ wxutil.request.put(url, data = {}, header = {}).then((data) => {
 })
 ```
 
-### patch
-```js
-wxutil.request.patch(url, data = {}, header = {}).then((data) => {
-    console.log(data)
-})
-```
-
 ### delete
 ```js
 wxutil.request.delete(url, data = {}, header = {}).then((data) => {

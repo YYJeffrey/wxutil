@@ -171,8 +171,7 @@ const socket = {
 /**
  * image用法：
  * 1.image.save(path).then((data) => {})
- * 2.image.preview([])
- * 3.image.choose(1).then((data) => {})
+ * 2.image.choose(1).then((data) => {})
  * @param {String} path
  * @param {JSON Object} urls
  */
@@ -188,12 +187,6 @@ const image = {
           reject('saveImage failed')
         }
       })
-    })
-  },
-
-  preview(urls) {
-    wx.previewImage({
-      urls: urls
     })
   },
 
