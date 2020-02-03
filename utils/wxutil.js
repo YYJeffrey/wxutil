@@ -41,6 +41,11 @@ const request = {
     let head = {
       'content-type': 'application/json'
     }
+    if (getApp().getHeader) {
+      const appHeader = getApp().getHeader()
+      head = Object.assign(head, appHeader)
+    }
+    wx.showNavigationBarLoading()
     return new Promise((resolve, reject) => {
       wx.request({
         url: url,
@@ -52,6 +57,9 @@ const request = {
         },
         fail() {
           reject('request failed')
+        },
+        complete() {
+          wx.hideNavigationBarLoading()
         }
       })
     })
@@ -73,15 +81,24 @@ const file = {
     }
     const { url, filePath, header } = handler
     return new Promise((resolve, reject) => {
+      let head = {}
+      if (getApp().getHeader) {
+        const appHeader = getApp().getHeader()
+        head = Object.assign(head, appHeader)
+      }
+      wx.showNavigationBarLoading()
       wx.downloadFile({
         url: url,
         filePath: filePath,
-        header: header,
+        header: Object.assign(head, header),
         success(res) {
           resolve(res)
         },
         fail() {
           reject('downloadFile failed')
+        },
+        complete() {
+          wx.hideNavigationBarLoading()
         }
       })
     })
@@ -90,17 +107,26 @@ const file = {
   upload(handler) {
     const { url, fileKey, filePath, data, header } = handler
     return new Promise((resolve, reject) => {
+      let head = {}
+      if (getApp().getHeader) {
+        const appHeader = getApp().getHeader()
+        head = Object.assign(head, appHeader)
+      }
+      wx.showNavigationBarLoading()
       wx.uploadFile({
         url: url,
         name: fileKey,
         filePath: filePath,
         formData: data,
-        header: header,
+        header: Object.assign(head, header),
         success(res) {
           resolve(res)
         },
         fail() {
           reject('uploadFile failed')
+        },
+        complete() {
+          wx.hideNavigationBarLoading()
         }
       })
     })
@@ -128,8 +154,12 @@ const file = {
 const socket = {
   connect(url, handler = {}) {
     const { header, protocols } = handler
-    const head = {
+    let head = {
       'content-type': 'application/json'
+    }
+    if (getApp().getHeader) {
+      const appHeader = getApp().getHeader()
+      head = Object.assign(head, appHeader)
     }
     return new Promise((resolve, reject) => {
       wx.connectSocket({

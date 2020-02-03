@@ -77,6 +77,20 @@ wxutil.request.delete(url, data = {}, header = {}).then((data) => {
 })
 ```
 
+### 全局header
+注：在app.js中写一个全局的getHeader方法并返回header可以为全局所有请求带上该头部
+```js
+// app.js
+getHeader() {
+    const userDetail = wxutil.getStorage("userDetail")
+    let header = {}
+    if (userDetail) {
+        header["Authorization"] = "Token " + userDetail.token
+    }
+    return header
+}
+```
+
 
 ## 文件请求
 封装微信小程序wx.downloadFile()和wx.uploadFile()方法
