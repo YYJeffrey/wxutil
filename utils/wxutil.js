@@ -53,6 +53,9 @@ const request = {
         header: Object.assign(head, header),
         method: ['GET', 'POST', 'PUT', 'DELETE'].indexOf(method) > -1 ? method : 'GET',
         success(res) {
+          if (getApp().gotoAuthPage) {
+            getApp().gotoAuthPage(res)
+          }
           resolve(res)
         },
         fail() {
