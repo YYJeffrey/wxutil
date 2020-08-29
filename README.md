@@ -2,7 +2,8 @@
 ![build](https://img.shields.io/badge/build-passing-00d508.svg) ![license](https://img.shields.io/badge/license-MIT-3963bc.svg) 
 
 
-wxutil工具使用promise语法封装了微信小程序官方的高频API，以及常用的开发方法。[项目地址: https://github.com/YYJeffrey/wxutil/](https://github.com/YYJeffrey/wxutil/)
+wxutil工具使用promise语法封装了微信小程序官方的高频API，以及常用的开发方法。  
+[项目地址: https://github.com/YYJeffrey/wxutil/](https://github.com/YYJeffrey/wxutil/)
 
 
 ## 快速上手
