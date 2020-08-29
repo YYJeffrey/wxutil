@@ -19,9 +19,9 @@ import { request } from "../../utils/wxutil.js"
 ## 工具模块
 - [网络请求](#网络请求)
 - [文件请求](#文件请求)
-- [socket通信](#socket通信)
+- [socket](#socket)
 - [图片操作](#图片操作)
-- [提示](#提示)
+- [交互](#交互)
     - [showToast](#showToast)
     - [showModal](#showModal)
     - [showLoading](#showLoading)
@@ -37,7 +37,7 @@ import { request } from "../../utils/wxutil.js"
 
 
 ## 网络请求
-封装微信小程序wx.request()方法实现五大http请求方法
+封装微信小程序wx.request()方法实现四大http请求方法
 
 ### get
 通过直接调用url获取请求
@@ -116,7 +116,7 @@ wxutil.file.upload({
 ```
 
 
-## socket通信
+## socket
 封装微信小程序的websocket部分方法，实现整个socket流程如下
 ```js
 let socketOpen = false  // socket连接标识
@@ -166,7 +166,7 @@ wxutil.image.choose(1).then((data) => {
 ```
 
 
-## 提示
+## 交互
 封装微信小程序的wx.showToast()、wx.showModal()、wx.showLoading()和wx.showActionSheet()方法，用于给用户友好提示
 
 ### showToast
@@ -205,7 +205,7 @@ wxutil.showActionSheet(['A', 'B', 'C']).then((data) => {
 
 
 ## 缓存
-封装微信小程序的wx.setStorageSync()和wx.getStorageSync()方法，异步设置缓存和获取缓存内容，并可以设置缓存过期时间
+封装微信小程序的wx.setStorageSync()和wx.getStorageSync()方法，同步设置缓存和获取缓存内容，并允许为缓存设置过期时间
 
 ### setStorage
 ```js
