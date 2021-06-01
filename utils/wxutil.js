@@ -15,28 +15,28 @@
  * @param {JSON Object} header
  */
  const request = {
-  get(url, data = {}, header = {}) {
+  get(url, data = {}, header = {}, showLoading = true) {
     const handler = { url, data, header }
-    return this.Request('GET', handler)
+    return this.Request('GET', handler, showLoading)
   },
 
-  post(url, data = {}, header = {}) {
+  post(url, data = {}, header = {}, showLoading = true) {
     const handler = { url, data, header }
-    return this.Request('POST', handler)
+    return this.Request('POST', handler, showLoading)
   },
 
-  put(url, data = {}, header = {}) {
+  put(url, data = {}, header = {}, showLoading = true) {
     const handler = { url, data, header }
-    return this.Request('PUT', handler)
+    return this.Request('PUT', handler, showLoading)
   },
 
-  delete(url, data = {}, header = {}) {
+  delete(url, data = {}, header = {}, showLoading = true) {
     const handler = { url, data, header }
-    return this.Request('DELETE', handler)
+    return this.Request('DELETE', handler, showLoading)
   },
 
   // RequestHandler
-  Request(method, handler) {
+  Request(method, handler, showLoading) {
     const { url, data, header } = handler
     let head = {
       'content-type': 'application/json'
@@ -45,7 +45,9 @@
       const appHeader = getApp().getHeader()
       head = Object.assign(head, appHeader)
     }
-    wx.showNavigationBarLoading()
+    if (showLoading) {
+      wx.showNavigationBarLoading()
+    }
     return new Promise((resolve, reject) => {
       wx.request({
         url: url,
