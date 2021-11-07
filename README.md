@@ -34,7 +34,7 @@ const wxutil = require('../../utils/wxutil.js')
   - [getStorage](#getStorage)
 - [授权](#授权)
   - [getLocation](#getLocation)
-  - [getUserInfo](#getUserInfo)
+  - [getUserProfile](#getUserProfile)
   - [requestPayment](#requestPayment)
 - [其他工具](#其他工具)
 
@@ -272,12 +272,12 @@ wxutil.getLocation('gcj02', true).then(res => {
 })
 ```
 
-### getUserInfo
+### getUserProfile
 
-获取用户信息，可传递两个参数：login 和 lang，login 为 true 可返回 wx.login 获取到的 code，lang 默认为中文，该方法需要使用 button 触发
+获取用户公开信息，包括头像、昵称等
 
 ```js
-wxutil.getUserInfo().then(res => {
+wxutil.getUserProfile().then(res => {
     console.log(res)
 })
 ```
