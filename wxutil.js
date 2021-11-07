@@ -13,6 +13,7 @@
  * @param {String} url
  * @param {JSON Object} data
  * @param {JSON Object} header
+ * @param {Boolean} showLoading
  */
  const request = {
   get(url, data = {}, header = {}, showLoading = true) {
@@ -60,8 +61,8 @@
           }
           resolve(res.data)
         },
-        fail() {
-          reject('request failed')
+        fail(error) {
+          reject(error)
         },
         complete() {
           wx.hideNavigationBarLoading()
@@ -99,8 +100,8 @@ const file = {
         success(res) {
           resolve(res)
         },
-        fail() {
-          reject('downloadFile failed')
+        fail(error) {
+          reject(error)
         },
         complete() {
           wx.hideNavigationBarLoading()
@@ -127,8 +128,8 @@ const file = {
         success(res) {
           resolve(res)
         },
-        fail() {
-          reject('uploadFile failed')
+        fail(error) {
+          reject(error)
         },
         complete() {
           wx.hideNavigationBarLoading()
@@ -174,9 +175,9 @@ const socket = {
         success(res) {
           resolve(res)
         },
-        fail() {
-          reject('connect failed')
-        }
+        fail(error) {
+          reject(error)
+        },
       })
     })
   },
@@ -189,8 +190,8 @@ const socket = {
         success(res) {
           resolve(res)
         },
-        fail() {
-          reject('sendSocketMessage failed')
+        fail(error) {
+          reject(error)
         }
       })
     })
@@ -219,8 +220,8 @@ const image = {
         success(res) {
           resolve(res)
         },
-        fail() {
-          reject('saveImageToPhotosAlbum failed')
+        fail(error) {
+          reject(error)
         }
       })
     })
@@ -235,8 +236,8 @@ const image = {
         success(res) {
           resolve(res)
         },
-        fail() {
-          reject('previewImage failed')
+        fail(error) {
+          reject(error)
         }
       })
     })
@@ -250,8 +251,8 @@ const image = {
         success(res) {
           resolve(res)
         },
-        fail() {
-          reject('chooseImage failed')
+        fail(error) {
+          reject(error)
         }
       })
     })
@@ -276,8 +277,8 @@ const showToast = (title, handler = {}) => {
       success(res) {
         resolve(res)
       },
-      fail() {
-        reject('showToast failed')
+      fail(error) {
+        reject(error)
       }
     })
   })
@@ -310,8 +311,8 @@ const showModal = (title, content, handler = {}) => {
       success(res) {
         resolve(res)
       },
-      fail() {
-        reject('showModal failed')
+      fail(error) {
+        reject(error)
       }
     })
   })
@@ -331,8 +332,8 @@ const showLoading = (title = '加载中...', mask = true) => {
       success(res) {
         resolve(res)
       },
-      fail() {
-        reject('showLoading failed')
+      fail(error) {
+        reject(error)
       }
     })
   })
@@ -352,8 +353,8 @@ const showActionSheet = (itemList, itemColor = '#000000') => {
       success(res) {
         resolve(res.tapIndex)
       },
-      fail() {
-        return
+      fail(error) {
+        reject(error)
       }
     })
   })
@@ -419,8 +420,8 @@ const getLocation = (type = 'gcj02', watch = false) => {
           })
         }
       },
-      fail() {
-        reject('getLocation failed')
+      fail(error) {
+        reject(error)
       }
     })
   })
@@ -439,8 +440,8 @@ const getUserProfile = (lang = 'zh_CN', desc = '授权用于获取个人公开�
       success(res) {
         resolve(res)
       },
-      fail() {
-        reject('getUserProfile failed')
+      fail(error) {
+        reject(error)
       }
     })
   })
@@ -463,8 +464,8 @@ const requestPayment = handler => {
       success(res) {
         resolve(res)
       },
-      fail() {
-        reject('requestPayment failed')
+      fail(error) {
+        reject(error)
       }
     })
   })
@@ -603,6 +604,22 @@ const calculate = {
   }
 }
 
+/**
+ * 获取UUID - getUUID用法
+ * getUUID()
+ */
+const getUUID = (hasOnline = true) => {
+  const s = []
+  const hexDigits = '0123456789abcdef'
+  for (let i = 0; i < 36; i++) {
+    s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1)
+  }
+  s[14] = '4'
+  s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1)
+  s[8] = s[13] = s[18] = s[23] = hasOnline ? '-' : ''
+  return s.join('')
+}
+
 module.exports = {
   request: request,
   file: file,
@@ -621,5 +638,6 @@ module.exports = {
   isNotNull: isNotNull,
   getDateTime: getDateTime,
   getTimestamp: getTimestamp,
-  calculate: calculate
+  calculate: calculate,
+  getUUID: getUUID
 }

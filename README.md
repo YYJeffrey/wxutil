@@ -2,21 +2,20 @@
 
 ![build](https://img.shields.io/badge/build-passing-brightgreen) ![license](https://img.shields.io/badge/license-MIT-green)
 
-wxutil 使用 promise 语法封装了微信小程序官方的高频API，以及常用的开发方法。  
+一款使用 promise 语法，封装了微信小程序官方的高频API，及常用的开发函数的工具库。  
 [项目地址: https://github.com/YYJeffrey/wxutil/](https://github.com/YYJeffrey/wxutil/)
 
 ## 快速上手
 
-方法一：在需要使用的位置引入 wxutil（以下两种方式均可引入）
+步骤一：安装 `wxutil`，使用命令 `npm i @yyjeffrey/wxutil`，或直接引入 `wxutil.js` 文件
+
+步骤二：在需要使用的位置引入 `wxutil`。
 
 ```js
+// npm引入的方式
+const wxutil = require("./miniprogram_npm/@yyjeffrey/wxutil/index")
+// 手动引入的方式
 const wxutil = require('../../utils/wxutil.js')
-```
-
-方法二：通过导入自己所需模块来引入 wxutil
-
-```js
-import { request } from '../../utils/wxutil.js'
 ```
 
 ## 工具模块
@@ -41,11 +40,11 @@ import { request } from '../../utils/wxutil.js'
 
 ## 网络请求
 
-封装微信小程序 wx.request() 实现http请求
+封装微信小程序 `wx.request()` 实现 http 请求
 
 ### get
 
-通过直接调用url获取请求
+通过直接调用 url 获取请求
 
 ```js
 wxutil.request.get(url).then(res => {
@@ -89,7 +88,7 @@ wxutil.request.delete(url, (data = {}), (header = {})).then(res => {
 
 ### 全局 header
 
-注：在app.js中写一个全局的 getHeader() 并返回 header 可以为全局所有请求带上该头部
+注：在 `app.js` 中写一个全局的 `getHeader()` 并返回 header 可以为全局所有请求带上该头部
 
 ```js
 // app.js
@@ -105,7 +104,7 @@ getHeader() {
 
 ## 文件请求
 
-封装微信小程序 wx.downloadFile() 和 wx.uploadFile()
+封装微信小程序 `wx.downloadFile()` 和 `wx.uploadFile()`
 
 ### download
 
@@ -131,7 +130,7 @@ wxutil.file.upload({
 
 ## socket
 
-封装微信小程序的 websocket 部分方法，实现 socket 流程如下
+封装微信小程序的 `websocket` 部分方法，实现 socket 流程如下
 
 ```js
 // socket连接标识
@@ -146,11 +145,11 @@ wx.onSocketMessage(res => {
 wx.onSocketOpen(() => {
     socketOpen = true
     if (socketOpen) {
-    // 发送socket消息
-    wxutil.socket.send('hello wxutil').then(res => {
-      console.log(res)
-    })
-  }
+        // 发送socket消息
+        wxutil.socket.send('hello wxutil').then(res => {
+            console.log(res)
+        })
+    }
 
     // 关闭socket连接
     wxutil.socket.close(url)
@@ -159,7 +158,7 @@ wx.onSocketOpen(() => {
 
 ## 图片操作
 
-封装微信小程序的 wx.saveImageToPhotosAlbum()、wx.previewImage()、wx.chooseImage()，用于保存图片到本机相册、预览图片以及从相机或相册选择图片
+封装微信小程序的 `wx.saveImageToPhotosAlbum()`、`wx.previewImage()`、`wx.chooseImage()`，用于保存图片到本机相册、预览图片以及从相机或相册选择图片
 
 ### save
 
@@ -231,7 +230,7 @@ wxutil.showActionSheet(['A', 'B', 'C']).then(res => {
 
 ## 缓存
 
-封装微信小程序的 wx.setStorageSync() 和 wx.getStorageSync()，同步设置缓存和获取缓存内容，并允许为缓存设置过期时间
+封装微信小程序的 `wx.setStorageSync()` 和 `wx.getStorageSync()`，同步设置缓存和获取缓存内容，并允许为缓存设置过期时间
 
 ### setStorage
 
@@ -285,7 +284,7 @@ wxutil.getUserInfo().then(res => {
 
 ### requestPayment
 
-封装了微信小程序的 requestPayment()，需要传递后端的 timeStamp、nonceStr、packageValue、paySign 这几个参数，加密方式默认为MD5
+封装了微信小程序的 `requestPayment()`，需要传递后端的 timeStamp、nonceStr、packageValue、paySign 这几个参数，加密方式默认为MD5
 
 ```js
 wxutil.requestPayment({
@@ -345,4 +344,12 @@ wxutil.calculate.add(0.1, 0.2)
 wxutil.calculate.sub(1, 0.8)
 wxutil.calculate.mul(6, 0.7)
 wxutil.calculate.div(1.2, 0.2)
+```
+
+### getUUID
+
+获取 UUID
+
+```js
+wxutil.getUUID()
 ```

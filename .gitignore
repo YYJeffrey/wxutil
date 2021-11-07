@@ -1,6 +1,1 @@
-/pages/*
-app.js
-app.wxss
-app.json
 project.config.json
-!/utils/wxutil.js

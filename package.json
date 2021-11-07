@@ -1,0 +1,22 @@
+{
+  "name": "@yyjeffrey/wxutil",
+  "version": "1.1.0",
+  "description": "WeChat Mini-Program High-frequency API toolkit - 小程序高频API工具库",
+  "main": "wxutil.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YYJeffrey/wxutil.git"
+  },
+  "keywords": [
+    "wxutil"
+  ],
+  "author": "YYJeffrey",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YYJeffrey/wxutil/issues"
+  },
+  "homepage": "https://github.com/YYJeffrey/wxutil#readme"
+}
