@@ -57,7 +57,7 @@
         method: ['GET', 'POST', 'PUT', 'DELETE'].indexOf(method) > -1 ? method : 'GET',
         success(res) {
           if (getApp().gotoAuthPage) {
-            getApp().gotoAuthPage(res)
+            getApp().gotoAuthPage(res.data)
           }
           resolve(res.data)
         },
