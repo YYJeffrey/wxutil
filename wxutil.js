@@ -1,6 +1,6 @@
 /**
  * @Author: Jeffrey
- * @Date: 2019-04
+ * @CreateDate: 2019-04
  * @Github: https://github.com/YYJeffrey/wxutil
  */
 
@@ -15,7 +15,7 @@
  * @param {JSON Object} header
  * @param {Boolean} showLoading
  */
- const request = {
+const request = {
   get(url, data = {}, header = {}, showLoading = true) {
     const handler = { url, data, header }
     return this.Request('GET', handler, showLoading)

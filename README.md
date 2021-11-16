@@ -2,12 +2,12 @@
 
 ![build](https://img.shields.io/badge/build-passing-brightgreen) ![license](https://img.shields.io/badge/license-MIT-green)
 
-一款使用 promise 语法，封装了微信小程序官方的高频API，及常用的开发函数的工具库。  
+一款使用 promise 语法，封装了微信小程序官方的高频API，及常用开发函数的工具库。  
 [项目地址: https://github.com/YYJeffrey/wxutil/](https://github.com/YYJeffrey/wxutil/)
 
 ## 快速上手
 
-步骤一：安装 `wxutil`，使用命令 `npm i @yyjeffrey/wxutil`，或直接引入 `wxutil.js` 文件
+步骤一：安装 `wxutil`，使用命令 `npm i @yyjeffrey/wxutil`，或直接下载引入 `wxutil.js` 文件
 
 步骤二：在需要使用的位置引入 `wxutil`。
 
@@ -15,7 +15,7 @@
 // npm引入的方式
 const wxutil = require("./miniprogram_npm/@yyjeffrey/wxutil/index")
 // 手动引入的方式
-const wxutil = require('../../utils/wxutil.js')
+const wxutil = require('./utils/wxutil.js')
 ```
 
 ## 工具模块
@@ -351,5 +351,6 @@ wxutil.calculate.div(1.2, 0.2)
 获取 UUID
 
 ```js
-wxutil.getUUID()
+const uuid = wxutil.getUUID()
+console.log(uuid)
 ```
