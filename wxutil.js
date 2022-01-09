@@ -15,7 +15,7 @@
  * @param {JSON Object} header
  * @param {Boolean} showLoading
  */
-const request = {
+ const request = {
   get(url, data = {}, header = {}, showLoading = true) {
     const handler = { url, data, header }
     return this.Request('GET', handler, showLoading)
@@ -55,13 +55,13 @@ const request = {
         data: data,
         header: Object.assign(head, header),
         method: ['GET', 'POST', 'PUT', 'DELETE'].indexOf(method) > -1 ? method : 'GET',
-        success(res) {
+        success: res => {
           if (getApp().gotoAuthPage) {
             getApp().gotoAuthPage(res.data)
           }
           resolve(res.data)
         },
-        fail(error) {
+        fail: error => {
           reject(error)
         },
         complete() {
@@ -97,10 +97,10 @@ const file = {
         url: url,
         filePath: filePath,
         header: Object.assign(head, header),
-        success(res) {
+        success: res => {
           resolve(res)
         },
-        fail(error) {
+        fail: error => {
           reject(error)
         },
         complete() {
@@ -125,10 +125,10 @@ const file = {
         filePath: filePath,
         formData: data,
         header: Object.assign(head, header),
-        success(res) {
+        success: res => {
           resolve(res)
         },
-        fail(error) {
+        fail: error => {
           reject(error)
         },
         complete() {
@@ -172,10 +172,10 @@ const socket = {
         url: url,
         header: Object.assign(head, header),
         protocols: typeof protocols === 'undefined' ? [] : protocols,
-        success(res) {
+        success: res => {
           resolve(res)
         },
-        fail(error) {
+        fail: error => {
           reject(error)
         },
       })
@@ -187,10 +187,10 @@ const socket = {
     return new Promise((resolve, reject) => {
       wx.sendSocketMessage({
         data: data,
-        success(res) {
+        success: res => {
           resolve(res)
         },
-        fail(error) {
+        fail: error => {
           reject(error)
         }
       })
@@ -217,10 +217,10 @@ const image = {
     return new Promise((resolve, reject) => {
       wx.saveImageToPhotosAlbum({
         filePath: path,
-        success(res) {
+        success: res => {
           resolve(res)
         },
-        fail(error) {
+        fail: error => {
           reject(error)
         }
       })
@@ -233,10 +233,10 @@ const image = {
         current,
         urls,
         showmenu,
-        success(res) {
+        success: res => {
           resolve(res)
         },
-        fail(error) {
+        fail: error => {
           reject(error)
         }
       })
@@ -248,10 +248,10 @@ const image = {
       wx.chooseImage({
         count: count,
         sourceType: sourceType,
-        success(res) {
+        success: res => {
           resolve(res)
         },
-        fail(error) {
+        fail: error => {
           reject(error)
         }
       })
@@ -274,10 +274,10 @@ const showToast = (title, handler = {}) => {
       icon: typeof icon === 'undefined' ? 'none' : icon,
       duration: typeof duration === 'undefined' ? 1000 : duration,
       mask: typeof mask === 'undefined' ? true : mask,
-      success(res) {
+      success: res => {
         resolve(res)
       },
-      fail(error) {
+      fail: error => {
         reject(error)
       }
     })
@@ -308,10 +308,10 @@ const showModal = (title, content, handler = {}) => {
       confirmText: typeof confirmText === 'undefined' ? '确定' : confirmText,
       cancelColor: typeof cancelColor === 'undefined' ? '#000000' : cancelColor,
       confirmColor: typeof confirmColor === 'undefined' ? '#576B95' : confirmColor,
-      success(res) {
+      success: res => {
         resolve(res)
       },
-      fail(error) {
+      fail: error => {
         reject(error)
       }
     })
@@ -329,10 +329,10 @@ const showLoading = (title = '加载中...', mask = true) => {
     wx.showLoading({
       title: title,
       mask: mask,
-      success(res) {
+      success: res => {
         resolve(res)
       },
-      fail(error) {
+      fail: error => {
         reject(error)
       }
     })
@@ -350,10 +350,10 @@ const showActionSheet = (itemList, itemColor = '#000000') => {
     wx.showActionSheet({
       itemList: itemList,
       itemColor: itemColor,
-      success(res) {
+      success: res => {
         resolve(res.tapIndex)
       },
-      fail(error) {
+      fail: error => {
         reject(error)
       }
     })
@@ -408,7 +408,7 @@ const getLocation = (type = 'gcj02', watch = false) => {
   return new Promise((resolve, reject) => {
     wx.getLocation({
       type: type,
-      success(res) {
+      success: res => {
         resolve(res)
         const latitude = res.latitude
         const longitude = res.longitude
@@ -420,7 +420,7 @@ const getLocation = (type = 'gcj02', watch = false) => {
           })
         }
       },
-      fail(error) {
+      fail: error => {
         reject(error)
       }
     })
@@ -437,10 +437,10 @@ const getUserProfile = (lang = 'zh_CN', desc = '授权用于获取个人公开�
     wx.getUserProfile({
       lang: lang,
       desc: desc,
-      success(res) {
+      success: res => {
         resolve(res)
       },
-      fail(error) {
+      fail: error => {
         reject(error)
       }
     })
@@ -461,10 +461,10 @@ const requestPayment = handler => {
       packageValue: packageValue,
       paySign: paySign,
       signType: typeof signType === 'undefined' ? 'MD5' : signType,
-      success(res) {
+      success: res => {
         resolve(res)
       },
-      fail(error) {
+      fail: error => {
         reject(error)
       }
     })
@@ -620,24 +620,24 @@ const getUUID = (hasOnline = true) => {
   return s.join('')
 }
 
-module.exports = {
-  request: request,
-  file: file,
-  socket: socket,
-  image: image,
-  showToast: showToast,
-  showModal: showModal,
-  showLoading: showLoading,
-  showActionSheet: showActionSheet,
-  setStorage: setStorage,
-  getStorage: getStorage,
-  getLocation: getLocation,
-  getUserProfile: getUserProfile,
-  requestPayment: requestPayment,
-  autoUpdate: autoUpdate,
-  isNotNull: isNotNull,
-  getDateTime: getDateTime,
-  getTimestamp: getTimestamp,
-  calculate: calculate,
-  getUUID: getUUID
+export default {
+  request,
+  file,
+  socket,
+  image,
+  showToast,
+  showModal,
+  showLoading,
+  showActionSheet,
+  setStorage,
+  getStorage,
+  getLocation,
+  getUserProfile,
+  requestPayment,
+  autoUpdate,
+  isNotNull,
+  getDateTime,
+  getTimestamp,
+  calculate,
+  getUUID
 }

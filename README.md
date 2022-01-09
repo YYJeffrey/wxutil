@@ -2,20 +2,18 @@
 
 ![build](https://img.shields.io/badge/build-passing-brightgreen) ![license](https://img.shields.io/badge/license-MIT-green)
 
-一款使用 promise 语法，封装了微信小程序官方的高频API，及常用开发函数的工具库。  
+一款使用 promise 语法，封装了微信小程序官方高频API，以及常用开发函数的工具库。  
 [项目地址: https://github.com/YYJeffrey/wxutil/](https://github.com/YYJeffrey/wxutil/)
 
 ## 快速上手
 
-步骤一：安装 `wxutil`，使用命令 `npm i @yyjeffrey/wxutil`，或直接下载引入 `wxutil.js` 文件
+步骤一：使用命令 `npm i @yyjeffrey/wxutil` 安装 `wxutil`，或直接下载引入 `wxutil.js` 文件
 
-步骤二：在需要使用的位置引入 `wxutil`。
+步骤二：在使用处引入 `wxutil`。
 
 ```js
-// npm引入的方式
-const wxutil = require("./miniprogram_npm/@yyjeffrey/wxutil/index")
-// 手动引入的方式
-const wxutil = require('./utils/wxutil.js')
+// 引入wxutil模块
+import wxutil from "./miniprogram_npm/@yyjeffrey/wxutil/index"
 ```
 
 ## 工具模块
@@ -37,14 +35,20 @@ const wxutil = require('./utils/wxutil.js')
   - [getUserProfile](#getUserProfile)
   - [requestPayment](#requestPayment)
 - [其他工具](#其他工具)
+  - [autoUpdate](#autoUpdate)
+  - [isNotNull](#isNotNull)
+  - [getDateTime](#getDateTime)
+  - [getTimestamp](#getTimestamp)
+  - [calculate](#calculate)
+  - [getUUID](#getUUID)
 
 ## 网络请求
 
-封装微信小程序 `wx.request()` 实现 http 请求
+封装了微信小程序 `wx.request()` 实现 http 请求
 
 ### get
 
-通过直接调用 url 获取请求
+直接调用 url 请求数据
 
 ```js
 wxutil.request.get(url).then(res => {
@@ -52,13 +56,15 @@ wxutil.request.get(url).then(res => {
 })
 ```
 
-异步获取请求并捕获异常
+调用 url 并填写参数请求数据
 
 ```js
 wxutil.request.get(url, (data = {}), (header = {})).then(res => {
-    console.log(res)    // 业务处理
+    // 业务处理
+    console.log(res)
 }).catch(error => {
-    console.log(error)  // 异常处理
+    // 异常处理
+    console.log(error)
 })
 ```
 
@@ -88,10 +94,11 @@ wxutil.request.delete(url, (data = {}), (header = {})).then(res => {
 
 ### 全局 header
 
-注：在 `app.js` 中写一个全局的 `getHeader()` 并返回 header 可以为全局所有请求带上该头部
+注：可以在 `app.js` 编写 `getHeader()` 函数并返回 header 对象，可以实现全局请求头功能
 
 ```js
 // app.js
+// 全局请求带上Token令牌的示例代码
 getHeader() {
     const userDetail = wxutil.getStorage('userDetail')
     let header = {}
@@ -186,7 +193,7 @@ wxutil.image.choose(1).then(res => {
 
 ## 交互
 
-封装微信小程序的 wx.showToast()、wx.showModal()、wx.showLoading() 和 wx.showActionSheet()
+封装微信小程序的 wx.showToast()、wx.showModal()、wx.showLoading()、wx.showActionSheet()
 
 ### showToast
 
@@ -230,7 +237,7 @@ wxutil.showActionSheet(['A', 'B', 'C']).then(res => {
 
 ## 缓存
 
-封装微信小程序的 `wx.setStorageSync()` 和 `wx.getStorageSync()`，同步设置缓存和获取缓存内容，并允许为缓存设置过期时间
+封装微信小程序的 `wx.setStorageSync()` 和 `wx.getStorageSync()`，同步设置缓存和获取缓存内容，并实现设置过期时间功能
 
 ### setStorage
 
@@ -238,7 +245,7 @@ wxutil.showActionSheet(['A', 'B', 'C']).then(res => {
 wxutil.setStorage('userInfo', userInfo)
 ```
 
-亦可为缓存设置过期时间，单位：秒
+为缓存设置过期时间，单位：秒
 
 ```js
 wxutil.setStorage('userInfo', userInfo, 86400)
@@ -256,7 +263,7 @@ wxutil.getStorage('userInfo')
 
 ### getLocation
 
-获取用户的地理位置
+封装了微信小程序的 `getLocation()`，获取用户的地理坐标
 
 ```js
 wxutil.getLocation().then(res => {
@@ -264,7 +271,7 @@ wxutil.getLocation().then(res => {
 })
 ```
 
-亦可通过传入可选参数打开微信小程序的地图
+通过传入可选参数打开微信小程序的地图
 
 ```js
 wxutil.getLocation('gcj02', true).then(res => {
@@ -274,7 +281,7 @@ wxutil.getLocation('gcj02', true).then(res => {
 
 ### getUserProfile
 
-获取用户公开信息，包括头像、昵称等
+封装了微信小程序的 `getUserProfile()`，获取用户公开信息，包括头像、昵称等
 
 ```js
 wxutil.getUserProfile().then(res => {
@@ -284,7 +291,7 @@ wxutil.getUserProfile().then(res => {
 
 ### requestPayment
 
-封装了微信小程序的 `requestPayment()`，需要传递后端的 timeStamp、nonceStr、packageValue、paySign 这几个参数，加密方式默认为MD5
+封装了微信小程序的 `requestPayment()`，需要传递后端的 timeStamp、nonceStr、packageValue、paySign 参数，加密方式默认为MD5
 
 ```js
 wxutil.requestPayment({
@@ -303,7 +310,7 @@ wxutil.requestPayment({
 
 ### autoUpdate
 
-在app.js中引用该方法，可在微信小程序发布新版本后自动更新
+在 `app.js` 中引用该方法，可在微信小程序发布新版本后提醒用户自动更新
 
 ```js
 wxutil.autoUpdate()
@@ -311,7 +318,7 @@ wxutil.autoUpdate()
 
 ### isNotNull
 
-判断字符串是否为空、空格回车等
+判断是否为非空字符串
 
 ```js
 wxutil.isNotNull('text')
