@@ -346,7 +346,7 @@ const showLoading = (title = '加载中...', mask = true) => {
  * @param {String} itemColor
  */
 const showActionSheet = (itemList, itemColor = '#000000') => {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     wx.showActionSheet({
       itemList: itemList,
       itemColor: itemColor,
