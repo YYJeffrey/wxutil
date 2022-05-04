@@ -399,35 +399,6 @@ const getStorage = key => {
 }
 
 /**
- * getLocation用法：
- * getLocation().then((data) => {})
- * @param {String} type
- * @param {Boolean} watch
- */
-const getLocation = (type = 'gcj02', watch = false) => {
-  return new Promise((resolve, reject) => {
-    wx.getLocation({
-      type: type,
-      success: res => {
-        resolve(res)
-        const latitude = res.latitude
-        const longitude = res.longitude
-        if (watch) {
-          wx.openLocation({
-            latitude,
-            longitude,
-            scale: 18
-          })
-        }
-      },
-      fail: error => {
-        reject(error)
-      }
-    })
-  })
-}
-
-/**
  * getUserProfile用法：
  * getUserProfile().then(res => {})
  * @param {String} lang
@@ -631,7 +602,6 @@ export default {
   showActionSheet,
   setStorage,
   getStorage,
-  getLocation,
   getUserProfile,
   requestPayment,
   autoUpdate,
