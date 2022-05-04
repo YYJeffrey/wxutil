@@ -31,7 +31,6 @@ import wxutil from "./miniprogram_npm/@yyjeffrey/wxutil/index"
   - [setStorage](#setStorage)
   - [getStorage](#getStorage)
 - [授权](#授权)
-  - [getLocation](#getLocation)
   - [getUserProfile](#getUserProfile)
   - [requestPayment](#requestPayment)
 - [其他工具](#其他工具)
@@ -267,14 +266,6 @@ wxutil.getStorage('userInfo')
 
 ```js
 wxutil.getLocation().then(res => {
-    console.log(res)
-})
-```
-
-通过传入可选参数打开微信小程序的地图
-
-```js
-wxutil.getLocation('gcj02', true).then(res => {
     console.log(res)
 })
 ```
