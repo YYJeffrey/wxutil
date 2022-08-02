@@ -1,9 +1,8 @@
 # wxutil
 
-![build](https://img.shields.io/badge/build-passing-brightgreen) ![license](https://img.shields.io/badge/license-MIT-green)
+一款使用 promise 封装的小程序高频 API 工具库
 
-一款使用 promise 语法，封装了微信小程序官方高频API，以及常用开发函数的工具库。  
-[项目地址: https://github.com/YYJeffrey/wxutil/](https://github.com/YYJeffrey/wxutil/)
+![build](https://img.shields.io/badge/build-passing-brightgreen) ![license](https://img.shields.io/badge/license-MIT-green)
 
 ## 快速上手
 
@@ -13,7 +12,7 @@
 
 ```js
 // 引入wxutil模块
-import wxutil from "./miniprogram_npm/@yyjeffrey/wxutil/index"
+import wxutil from './miniprogram_npm/@yyjeffrey/wxutil/index'
 ```
 
 ## 工具模块
@@ -51,27 +50,30 @@ import wxutil from "./miniprogram_npm/@yyjeffrey/wxutil/index"
 
 ```js
 wxutil.request.get(url).then(res => {
-    console.log(res)
+  console.log(res)
 })
 ```
 
 调用 url 并填写参数请求数据
 
 ```js
-wxutil.request.get(url, (data = {}), (header = {})).then(res => {
+wxutil.request
+  .get(url, (data = {}), (header = {}))
+  .then(res => {
     // 业务处理
     console.log(res)
-}).catch(error => {
+  })
+  .catch(error => {
     // 异常处理
     console.log(error)
-})
+  })
 ```
 
 ### post
 
 ```js
 wxutil.request.post(url, (data = {}), (header = {})).then(res => {
-    console.log(res)
+  console.log(res)
 })
 ```
 
@@ -79,7 +81,7 @@ wxutil.request.post(url, (data = {}), (header = {})).then(res => {
 
 ```js
 wxutil.request.put(url, (data = {}), (header = {})).then(res => {
-    console.log(res)
+  console.log(res)
 })
 ```
 
@@ -87,7 +89,7 @@ wxutil.request.put(url, (data = {}), (header = {})).then(res => {
 
 ```js
 wxutil.request.delete(url, (data = {}), (header = {})).then(res => {
-    console.log(res)
+  console.log(res)
 })
 ```
 
@@ -116,22 +118,24 @@ getHeader() {
 
 ```js
 wxutil.file.download({ url }).then(res => {
-    console.log(res)
+  console.log(res)
 })
 ```
 
 ### upload
 
 ```js
-wxutil.file.upload({
+wxutil.file
+  .upload({
     url: url,
     fileKey: fileKey,
     filePath: filePath,
     data: {},
-    header: {},
-}).then(res => {
+    header: {}
+  })
+  .then(res => {
     console.log(res)
-})
+  })
 ```
 
 ## socket
@@ -145,20 +149,20 @@ wxutil.socket.connect(url)
 
 // 监听socket通信
 wx.onSocketMessage(res => {
-    console.log(res)
+  console.log(res)
 })
 
 wx.onSocketOpen(() => {
-    socketOpen = true
-    if (socketOpen) {
-        // 发送socket消息
-        wxutil.socket.send('hello wxutil').then(res => {
-            console.log(res)
-        })
-    }
+  socketOpen = true
+  if (socketOpen) {
+    // 发送socket消息
+    wxutil.socket.send('hello wxutil').then(res => {
+      console.log(res)
+    })
+  }
 
-    // 关闭socket连接
-    wxutil.socket.close(url)
+  // 关闭socket连接
+  wxutil.socket.close(url)
 })
 ```
 
@@ -170,7 +174,7 @@ wx.onSocketOpen(() => {
 
 ```js
 wxutil.image.save(path).then(res => {
-    console.log(res)
+  console.log(res)
 })
 ```
 
@@ -186,7 +190,7 @@ wxutil.image.preview(['imageUrl'])
 
 ```js
 wxutil.image.choose(1).then(res => {
-    console.log(res)
+  console.log(res)
 })
 ```
 
@@ -230,7 +234,7 @@ wxutil.showLoading('加载中')
 
 ```js
 wxutil.showActionSheet(['A', 'B', 'C']).then(res => {
-    console.log(res)
+  console.log(res)
 })
 ```
 
@@ -266,7 +270,7 @@ wxutil.getStorage('userInfo')
 
 ```js
 wxutil.getLocation().then(res => {
-    console.log(res)
+  console.log(res)
 })
 ```
 
@@ -276,23 +280,25 @@ wxutil.getLocation().then(res => {
 
 ```js
 wxutil.getUserProfile().then(res => {
-    console.log(res)
+  console.log(res)
 })
 ```
 
 ### requestPayment
 
-封装了微信小程序的 `requestPayment()`，需要传递后端的 timeStamp、nonceStr、packageValue、paySign 参数，加密方式默认为MD5
+封装了微信小程序的 `requestPayment()`，需要传递后端的 timeStamp、nonceStr、packageValue、paySign 参数，加密方式默认为 MD5
 
 ```js
-wxutil.requestPayment({
+wxutil
+  .requestPayment({
     timeStamp: timeStamp,
     nonceStr: nonceStr,
     packageValue: packageValue,
-    paySign: paySign,
-}).then(res => {
+    paySign: paySign
+  })
+  .then(res => {
     console.log(res)
-})
+  })
 ```
 
 ## 其他工具

@@ -15,7 +15,7 @@
  * @param {JSON Object} header
  * @param {Boolean} showLoading
  */
- const request = {
+const request = {
   get(url, data = {}, header = {}, showLoading = true) {
     const handler = { url, data, header }
     return this.Request('GET', handler, showLoading)
@@ -54,7 +54,10 @@
         url: url,
         data: data,
         header: Object.assign(head, header),
-        method: ['GET', 'POST', 'PUT', 'DELETE'].indexOf(method) > -1 ? method : 'GET',
+        method:
+          ['GET', 'POST', 'PUT', 'DELETE'].indexOf(method) > -1
+            ? method
+            : 'GET',
         success: res => {
           if (getApp().gotoAuthPage) {
             getApp().gotoAuthPage(res.data)
@@ -177,7 +180,7 @@ const socket = {
         },
         fail: error => {
           reject(error)
-        },
+        }
       })
     })
   },
@@ -292,13 +295,8 @@ const showToast = (title, handler = {}) => {
  * @param {JSON Object} handler
  */
 const showModal = (title, content, handler = {}) => {
-  const {
-    showCancel,
-    cancelText,
-    confirmText,
-    cancelColor,
-    confirmColor
-  } = handler
+  const { showCancel, cancelText, confirmText, cancelColor, confirmColor } =
+    handler
   return new Promise((resolve, reject) => {
     wx.showModal({
       title: title,
@@ -307,7 +305,8 @@ const showModal = (title, content, handler = {}) => {
       cancelText: typeof cancelText === 'undefined' ? '取消' : cancelText,
       confirmText: typeof confirmText === 'undefined' ? '确定' : confirmText,
       cancelColor: typeof cancelColor === 'undefined' ? '#000000' : cancelColor,
-      confirmColor: typeof confirmColor === 'undefined' ? '#576B95' : confirmColor,
+      confirmColor:
+        typeof confirmColor === 'undefined' ? '#576B95' : confirmColor,
       success: res => {
         resolve(res)
       },
@@ -346,7 +345,7 @@ const showLoading = (title = '加载中...', mask = true) => {
  * @param {String} itemColor
  */
 const showActionSheet = (itemList, itemColor = '#000000') => {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     wx.showActionSheet({
       itemList: itemList,
       itemColor: itemColor,
@@ -389,10 +388,12 @@ const getStorage = key => {
   const dtime = '_deadtime'
   const deadtime = parseInt(wx.getStorageSync(key + dtime))
   if (deadtime && Date.parse(new Date()) / 1000 > parseInt(deadtime)) {
+    wx.removeStorageSync(key)
+    wx.removeStorageSync(key + dtime)
     return null
   }
   const res = wx.getStorageSync(key)
-  if (typeof (res) === 'boolean') {
+  if (typeof res === 'boolean') {
     return res
   }
   return res ? res : null
@@ -459,7 +460,8 @@ const autoUpdate = () => {
       })
       updateManager.onUpdateFailed(() => {
         showModal(
-          '更新提示', '新版本已经准备好，请删除当前小程序，重新搜索打开'
+          '更新提示',
+          '新版本已经准备好，请删除当前小程序，重新搜索打开'
         )
       })
     }
@@ -543,32 +545,64 @@ const getTimestamp = (date = new Date()) => {
 const calculate = {
   add(num1, num2) {
     let r1, r2, m
-    try { r1 = num1.toString().split('.')[1].length } catch (e) { r1 = 0 }
-    try { r2 = num2.toString().split('.')[1].length } catch (e) { r2 = 0 }
+    try {
+      r1 = num1.toString().split('.')[1].length
+    } catch (e) {
+      r1 = 0
+    }
+    try {
+      r2 = num2.toString().split('.')[1].length
+    } catch (e) {
+      r2 = 0
+    }
     m = Math.pow(10, Math.max(r1, r2))
     return (num1 * m + num2 * m) / m
   },
 
   sub(num1, num2) {
     let r1, r2, m, n
-    try { r1 = num1.toString().split('.')[1].length } catch (e) { r1 = 0 }
-    try { r2 = num2.toString().split('.')[1].length } catch (e) { r2 = 0 }
+    try {
+      r1 = num1.toString().split('.')[1].length
+    } catch (e) {
+      r1 = 0
+    }
+    try {
+      r2 = num2.toString().split('.')[1].length
+    } catch (e) {
+      r2 = 0
+    }
     m = Math.pow(10, Math.max(r1, r2))
-    n = (r1 >= r2) ? r1 : r2
+    n = r1 >= r2 ? r1 : r2
     return ((num1 * m - num2 * m) / m).toFixed(n)
   },
 
   mul(num1, num2) {
-    let m = 0, s1 = num1.toString(), s2 = num2.toString()
-    try { m += s1.split('.')[1].length } catch (e) { }
-    try { m += s2.split('.')[1].length } catch (e) { }
-    return Number(s1.replace('.', '')) * Number(s2.replace('.', '')) / Math.pow(10, m)
+    let m = 0,
+      s1 = num1.toString(),
+      s2 = num2.toString()
+    try {
+      m += s1.split('.')[1].length
+    } catch (e) {}
+    try {
+      m += s2.split('.')[1].length
+    } catch (e) {}
+    return (
+      (Number(s1.replace('.', '')) * Number(s2.replace('.', ''))) /
+      Math.pow(10, m)
+    )
   },
 
   div(num1, num2) {
-    var t1 = 0, t2 = 0, r1, r2
-    try { t1 = num1.toString().split('.')[1].length } catch (e) { }
-    try { t2 = num2.toString().split('.')[1].length } catch (e) { }
+    var t1 = 0,
+      t2 = 0,
+      r1,
+      r2
+    try {
+      t1 = num1.toString().split('.')[1].length
+    } catch (e) {}
+    try {
+      t2 = num2.toString().split('.')[1].length
+    } catch (e) {}
     r1 = Number(num1.toString().replace('.', ''))
     r2 = Number(num2.toString().replace('.', ''))
     return (r1 / r2) * Math.pow(10, t2 - t1)
