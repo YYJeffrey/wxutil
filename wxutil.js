@@ -1,8 +1,11 @@
 /**
- * @Author: Jeffrey
- * @CreateDate: 2019-04
- * @Github: https://github.com/YYJeffrey/wxutil
+ * @author: Jeffrey
  */
+
+// 兼容uni-app
+if (typeof uni !== 'undefined') {
+  wx = uni
+}
 
 /**
  * request用法：

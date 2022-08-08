@@ -1,6 +1,6 @@
 # wxutil
 
-一款使用 promise 封装的小程序高频 API 工具库
+一款使用 promise 封装的小程序高频 API 工具库，已兼容 uni-app
 
 ![build](https://img.shields.io/badge/build-passing-brightgreen) ![license](https://img.shields.io/badge/license-MIT-green)
 
